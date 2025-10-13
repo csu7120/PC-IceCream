@@ -1,0 +1,52 @@
+# ==== Common ====
+.DS_Store
+Thumbs.db
+ehthumbs.db
+desktop.ini
+*.log
+*.tmp
+*.bak
+*.env
+
+# ==== IDE ====
+.idea/
+*.iml
+.vscode/
+.classpath
+.project
+.settings/
+.factorypath
+
+# ==== Java / Maven / Gradle ====
+target/
+build/
+out/
+bin/
+.mvn/
+mvnw
+mvnw.cmd
+.gradle/
+gradle/
+!gradle/wrapper/gradle-wrapper.jar
+
+# ==== Spring Boot Sensitive ====
+**/application-*.yml
+**/application-*.properties
+
+# ==== Android ====
+local.properties
+captures/
+.externalNativeBuild/
+.cxx/
+*.apk
+*.aab
+output-metadata.json
+google-services.json
+*.jks
+*.keystore
+*.hprof
+
+# ==== IntelliJ extras (optional) ====
+misc.xml
+deploymentTargetDropDown.xml
+render.experimental.xml
