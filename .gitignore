@@ -1,34 +1,65 @@
-# Gradle files
+# ==== 공통 설정 ====
+.DS_Store
+Thumbs.db
+*.log
+*.env
+*.bak
+
+# ==== IDE ====
+.idea/
+*.iml
+.vscode/
+*.class
+*.jar
+*.war
+
+# ==== OS ====
+ehthumbs.db
+desktop.ini
+
+# ==== Android ====
 .gradle/
 build/
-
-# Local configuration file (sdk path, etc)
 local.properties
-
-# Log/OS Files
-*.log
-
-# Android Studio generated files and folders
 captures/
 .externalNativeBuild/
 .cxx/
-*.aab
 *.apk
+*.aab
 output-metadata.json
+google-services.json
+*.jks
+*.keystore
+*.hprof
 
-# IntelliJ
-*.iml
-.idea/
+# ==== IntelliJ ====
 misc.xml
 deploymentTargetDropDown.xml
 render.experimental.xml
 
-# Keystore files
-*.jks
-*.keystore
+# ==== Spring Boot / Maven ====
+backend/target/
+backend/build/
+backend/.mvn/
+backend/mvnw
+backend/mvnw.cmd
+backend/.idea/
+backend/.classpath
+backend/.project
+backend/.settings/
+backend/*.iml
+backend/*.log
 
-# Google Services (e.g. APIs or Firebase)
-google-services.json
+# ==== Gradle Wrapper ====
+gradle/
+!gradle/wrapper/gradle-wrapper.jar
 
-# Android Profiling
-*.hprof
+# ==== Logs / Temporary ====
+logs/
+*.log
+*.tmp
+*.bak
+
+# ==== Sensitive Config Files ====
+**/application-*.yml
+**/application-*.properties
