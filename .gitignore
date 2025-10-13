@@ -1,25 +1,39 @@
-# ==== 공통 설정 ====
+# ==== Common ====
 .DS_Store
 Thumbs.db
+ehthumbs.db
+desktop.ini
 *.log
-*.env
+*.tmp
 *.bak
+*.env
 
 # ==== IDE ====
 .idea/
 *.iml
 .vscode/
-*.class
-*.jar
-*.war
+.classpath
+.project
+.settings/
+.factorypath
 
-# ==== OS ====
-ehthumbs.db
-desktop.ini
+# ==== Java / Maven / Gradle ====
+target/
+build/
+out/
+bin/
+.mvn/
+mvnw
+mvnw.cmd
+.gradle/
+gradle/
+!gradle/wrapper/gradle-wrapper.jar
+
+# ==== Spring Boot Sensitive ====
+**/application-*.yml
+**/application-*.properties
 
 # ==== Android ====
-.gradle/
-build/
 local.properties
 captures/
 .externalNativeBuild/
@@ -32,34 +46,7 @@ google-services.json
 *.keystore
 *.hprof
 
-# ==== IntelliJ ====
+# ==== IntelliJ extras (optional) ====
 misc.xml
 deploymentTargetDropDown.xml
 render.experimental.xml
-
-# ==== Spring Boot / Maven ====
-backend/target/
-backend/build/
-backend/.mvn/
-backend/mvnw
-backend/mvnw.cmd
-backend/.idea/
-backend/.classpath
-backend/.project
-backend/.settings/
-backend/*.iml
-backend/*.log
-
-# ==== Gradle Wrapper ====
-gradle/
-!gradle/wrapper/gradle-wrapper.jar
-
-# ==== Logs / Temporary ====
-logs/
-*.log
-*.tmp
-*.bak
-
-# ==== Sensitive Config Files ====
-**/application-*.yml
-**/application-*.properties
