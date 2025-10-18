@@ -1,5 +1,7 @@
 package com.campuslink.backend.domain.user.dto;
 
-public class LoginResponse {
-
-}
+public record LoginResponse(
+        String accessToken,
+        Long   expiresInSeconds,
+        UserResponse user
+) {}

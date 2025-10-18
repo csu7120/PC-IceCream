@@ -1,11 +1,10 @@
-// entity/User.java
 package com.campuslink.backend.domain.user.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.math.BigDecimal;        // ⬅ 추가
+import java.math.BigDecimal;       
 import java.time.LocalDateTime;
 
 @Entity
@@ -15,7 +14,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")              // DB 컬럼명 매핑
+    @Column(name = "user_id")              
     private Integer userId;
 
     @Column(name = "campus_id", nullable = false)
@@ -39,7 +38,6 @@ public class User {
     @Column(name = "is_verified", nullable = false)
     private Boolean isVerified = false;
 
-    // ⬇ Double → BigDecimal 로 변경 (DECIMAL(3,2)와 1:1)
     @Column(name = "rating_avg", precision = 3, scale = 2, nullable = false)
     private BigDecimal ratingAvg = new BigDecimal("0.00");
 

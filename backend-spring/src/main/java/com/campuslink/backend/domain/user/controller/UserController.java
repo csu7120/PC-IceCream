@@ -1,19 +1,20 @@
-// controller/UserController.java
 package com.campuslink.backend.domain.user.controller;
 
 import com.campuslink.backend.common.response.ApiResponse;
-import com.campuslink.backend.domain.user.entity.User;
-import com.campuslink.backend.domain.user.repository.UserRepository;
+import com.campuslink.backend.domain.user.dto.UserResponse;
+import com.campuslink.backend.domain.user.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/users")
+@RequiredArgsConstructor
 public class UserController {
-    private final UserRepository userRepository;
-    public UserController(UserRepository userRepository){ this.userRepository = userRepository; }
+
+    private final UserService userService;
 
     @GetMapping("/{id}")
-    public ApiResponse<User> find(@PathVariable Long id){
-        return ApiResponse.ok(userRepository.findById(id).orElseThrow());
+    public ApiResponse<UserResponse> find(@PathVariable Integer id) { 
+        return ApiResponse.ok(userService.getById(id));
     }
 }
