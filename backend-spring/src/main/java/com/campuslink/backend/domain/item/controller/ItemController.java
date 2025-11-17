@@ -30,11 +30,11 @@ public class ItemController {
             @RequestPart(value = "images", required = false) List<MultipartFile> files
     ) {
         try {
-            // 1️⃣ 사용자 조회
+            // 사용자 조회
             User user = userRepository.findById(userId)
                     .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
 
-            // 2️⃣ Item 엔티티 생성
+            // Item 엔티티 생성
             Item item = Item.builder()
                     .title(title)
                     .description(description)
@@ -43,7 +43,7 @@ public class ItemController {
                     .user(user)
                     .build();
 
-            // 3️⃣ 이미지 포함 저장
+            // 이미지 포함 저장
             Item saved = itemService.registerItem(item, files);
 
             return ApiResponse.ok(saved);
