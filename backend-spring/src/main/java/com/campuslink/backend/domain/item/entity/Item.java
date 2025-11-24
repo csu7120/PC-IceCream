@@ -22,7 +22,19 @@ public class Item {
     private String title;
     private String description;
     private Double price;
+
+    // ✅ DB에 category 컬럼이 있어서 기존대로 유지
     private String category;
+
+    // ✅ 판매 가능 여부 (DB sale_available)
+    @Builder.Default
+    @Column(name = "sale_available", nullable = false)
+    private Boolean saleAvailable = true;
+
+    // ✅ 대여 가능 여부 (DB rent_available)
+    @Builder.Default  
+    @Column(name = "rent_available", nullable = false)
+    private Boolean rentAvailable = true;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id")
