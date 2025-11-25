@@ -1,5 +1,5 @@
 package com.campuslink.backend.domain.item.entity;
-
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.campuslink.backend.domain.user.entity.User;
 import jakarta.persistence.*;
@@ -12,6 +12,7 @@ import java.util.List;
 @NoArgsConstructor @AllArgsConstructor
 @Builder
 @Table(name = "items")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Item {
 
     @Id
@@ -38,6 +39,7 @@ public class Item {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private User user;
 
     private LocalDateTime createdAt = LocalDateTime.now();

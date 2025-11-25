@@ -1,5 +1,6 @@
 package com.campuslink.backend.domain.item.entity;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,5 +21,6 @@ public class ItemImage {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id")
     @JsonManagedReference
+    @JsonBackReference
     private Item item;
 }

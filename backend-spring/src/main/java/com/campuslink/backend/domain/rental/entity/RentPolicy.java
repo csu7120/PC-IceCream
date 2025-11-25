@@ -9,13 +9,16 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "rent_policies")
-@Getter @Setter
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class RentPolicy {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "policy_id")
     private Integer policyId;
 
     @OneToOne(fetch = FetchType.LAZY)
