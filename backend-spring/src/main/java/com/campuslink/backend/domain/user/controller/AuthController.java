@@ -16,14 +16,16 @@ public class AuthController {
 
     private final AuthService authService;
 
-    @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@RequestBody @Valid LoginRequest req) {
-        return ResponseEntity.ok(authService.login(req));
-    }
-    // ✅ 회원가입
     @PostMapping("/signup")
     public ResponseEntity<LoginResponse> signup(@RequestBody @Valid SignupRequest req) {
         LoginResponse res = authService.signup(req);
         return ResponseEntity.status(HttpStatus.CREATED).body(res);
+    }
+
+    // 로그인 + 토큰 발급
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> login(@RequestBody @Valid LoginRequest req) {
+        LoginResponse res = authService.login(req);
+        return ResponseEntity.ok(res);
     }
 }

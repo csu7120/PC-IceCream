@@ -1,63 +1,65 @@
 package com.campuslink.backend.domain.user.service;
 
-import com.campuslink.backend.domain.campus.service.CampusService;
-import com.campuslink.backend.domain.user.dto.LoginRequest;
-import com.campuslink.backend.domain.user.dto.LoginResponse;
-import com.campuslink.backend.domain.user.dto.SignupRequest;
-import com.campuslink.backend.domain.user.dto.UserResponse;
+import com.campuslink.backend.domain.user.dto.*;
 import com.campuslink.backend.domain.user.entity.User;
 import com.campuslink.backend.domain.user.repository.UserRepository;
+import com.campuslink.backend.security.JwtProvider;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
 public class AuthService {
 
-    private final UserRepository users;
-    private final CampusService campusService;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
+    private final JwtProvider jwtProvider;
 
-    @Value("${jwt.access-exp-seconds:3600}")
-    private long expires; // 있어도 되고 없어도 됨
+    private final long expiresInMinutes = 60L; // JwtProvider 설정과 맞추기
 
-    // ✅ JWT, PasswordEncoder 완전 제거
+    // 회원가입
+    public LoginResponse signup(SignupRequest req) {
 
-    public LoginResponse login(LoginRequest req) {
-        User u = users.findByEmail(req.email())
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 이메일입니다."));
-
-        // 🔸 단순 문자열 비교
-        if (!req.password().equals(u.getPassword())) {
-            throw new IllegalArgumentException("비밀번호가 올바르지 않습니다.");
+        if (userRepository.existsByEmail(req.email())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "이미 사용 중인 이메일입니다.");
         }
 
-        // 🔸 임시 토큰 (지금은 JWT 안 씀)
-        String fakeToken = "dev-mode-no-token";
+        User user = User.builder()
+                .email(req.email())
+                .password(passwordEncoder.encode(req.password()))
+                .name(req.name())
+                .campusId(req.campusId())
+                .build();
 
-        return new LoginResponse(fakeToken, expires, UserResponse.from(u));
+        User saved = userRepository.save(user);
+
+        String token = jwtProvider.generateToken(saved.getEmail());
+
+        return LoginResponse.of(token, expiresInMinutes, saved);
     }
 
-    public LoginResponse signup(SignupRequest req) {
-        if (users.existsByEmail(req.email())) {
-            throw new IllegalArgumentException("이미 사용 중인 이메일입니다.");
-        }
+    // 로그인
+    public LoginResponse login(LoginRequest req) {
 
-        campusService.validateEmailDomain(req.campusId(), req.email());
+        // Spring Security 인증 시도 (비밀번호 검증)
+        Authentication authToken = new UsernamePasswordAuthenticationToken(
+                req.email(), req.password()
+        );
 
-        User u = new User();
-        u.setCampusId(req.campusId());
-        u.setEmail(req.email());
-        u.setPassword(req.password()); // 🔸 평문 저장
-        u.setName(req.name());
-        u.setPhone(req.phone());
-        u.setIsVerified(true);
+        Authentication auth = authenticationManager.authenticate(authToken);
 
-        users.save(u);
+        // 여기까지 통과하면 로그인 성공
+        User user = userRepository.findByEmail(req.email())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "사용자를 찾을 수 없습니다."));
 
-        // 🔸 임시 토큰 반환
-        String fakeToken = "dev-mode-no-token";
+        String token = jwtProvider.generateToken(user.getEmail());
 
-        return new LoginResponse(fakeToken, expires, UserResponse.from(u));
+        return LoginResponse.of(token, expiresInMinutes, user);
     }
 }
