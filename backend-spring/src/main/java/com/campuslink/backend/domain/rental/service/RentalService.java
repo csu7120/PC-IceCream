@@ -4,6 +4,7 @@ import com.campuslink.backend.common.exception.BusinessException;
 import com.campuslink.backend.common.exception.ErrorCode;
 import com.campuslink.backend.domain.item.entity.Item;
 import com.campuslink.backend.domain.item.repository.ItemRepository;
+import com.campuslink.backend.domain.notification.service.NotificationService;
 import com.campuslink.backend.domain.rental.dto.RentalRequest;
 import com.campuslink.backend.domain.rental.dto.RentalResponse;
 import com.campuslink.backend.domain.rental.entity.RentPolicy;
@@ -24,6 +25,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RentalService {
 
+	private final NotificationService notificationService;
     private final RentalRepository rentalRepository;
     private final RentPolicyRepository rentPolicyRepository;
     private final ItemRepository itemRepository;
@@ -83,6 +85,12 @@ public class RentalService {
                 .build();
 
         Rental saved = rentalRepository.save(rental);
+     //대여 요청 → 물건 주인에게 전달
+        notificationService.notifyUser(
+                lender.getUserId(),
+                "RENT_REQUEST",
+                "[대여 요청] '" + item.getTitle() + "'에 새로운 대여 요청이 도착했습니다."
+        );
         return toResponse(saved);
     }
 
@@ -98,6 +106,12 @@ public class RentalService {
         }
 
         rental.setStatus(RentalStatus.ACCEPTED);
+     //대여 수락 → 빌리는 사람에게 전달
+        notificationService.notifyUser(
+                rental.getRenter().getUserId(),
+                "RENT_ACCEPTED",
+                "[대여 수락] '" + rental.getItem().getTitle() + "' 대여가 수락되었습니다."
+        );
         return toResponse(rental);
     }
 
@@ -182,6 +196,12 @@ public class RentalService {
         }
 
         rental.setStatus(RentalStatus.RETURNED);
+     //반납 완료 → 물건 주인에게 전달
+        notificationService.notifyUser(
+                rental.getLender().getUserId(),
+                "RENT_RETURNED",
+                "[반납 완료] '" + rental.getItem().getTitle() + "' 반납이 완료되었습니다."
+        );
 
         Item item = rental.getItem();
         item.setRentAvailable(true);

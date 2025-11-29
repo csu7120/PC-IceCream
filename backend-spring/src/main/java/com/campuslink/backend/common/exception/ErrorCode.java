@@ -18,6 +18,9 @@ public enum ErrorCode {
     RENT_CANNOT_CANCEL_NOW("현재 상태에서는 취소할 수 없습니다."),
     RENTAL_NOT_FOUND("대여 정보를 찾을 수 없습니다."),
     FORBIDDEN("권한이 없습니다."),
+    
+    NOTIFICATION_NOT_FOUND("알림을 찾을 수 없습니다."),
+    ACCESS_DENIED("접근 권한이 없습니다."),
 
     // ✅ QR 전용 에러
     QR_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "이미 미사용 QR이 존재합니다."),

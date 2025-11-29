@@ -5,6 +5,7 @@ import com.campuslink.backend.domain.chat.dto.ChatRoomResponse;
 import com.campuslink.backend.domain.chat.dto.ChatMessageRequest;
 import com.campuslink.backend.domain.chat.entity.*;
 import com.campuslink.backend.domain.chat.repository.*;
+import com.campuslink.backend.domain.notification.service.NotificationService;
 import com.campuslink.backend.domain.user.entity.User;
 import com.campuslink.backend.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ChatService {
 
+	private final NotificationService notificationService;
     private final ChatRoomRepository chatRooms;
     private final ChatMemberRepository chatMembers;
     private final ChatMessageRepository messages;
@@ -102,6 +104,17 @@ public class ChatService {
                 .build();
 
         msg = messages.save(msg);
+     //새 메시지 → 방의 다른 모든 사용자에게 보내기
+        List<ChatMember> members = chatMembers.findByChat_Id(chatId);
+        for (ChatMember m : members) {
+            if (!m.getUser().getUserId().equals(meId)) {
+                notificationService.notifyUser(
+                        m.getUser().getUserId(),
+                        "CHAT_NEW",
+                        "[새 메시지] " + sender.getName() + ": " + req.getContent()
+                );
+            }
+        }
 
         return toMessageResponse(msg);
     }
