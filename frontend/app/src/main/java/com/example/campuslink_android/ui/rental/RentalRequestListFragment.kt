@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.campuslink_android.R
 import com.example.campuslink_android.core.network.ApiClient
+import com.example.campuslink_android.core.network.TokenStore
 import com.example.campuslink_android.data.dao.RentalApi
 import com.example.campuslink_android.data.repository.RentalRepositoryImpl
 
@@ -25,9 +26,11 @@ class RentalRequestListFragment : Fragment() {
     ): View? = inflater.inflate(R.layout.fragment_rental_request_list, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         val rentalApi = ApiClient.create(RentalApi::class.java)
-        val rentalRepository = RentalRepositoryImpl(rentalApi)
+        // 🔹 여기에도 TokenStore를 같이 넘겨줌
+        val rentalRepository = RentalRepositoryImpl(rentalApi, TokenStore)
         val factory = RentalListViewModelFactory(rentalRepository)
 
         viewModel = ViewModelProvider(this, factory)[RentalListViewModel::class.java]
@@ -36,7 +39,6 @@ class RentalRequestListFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         adapter = RentalRequestAdapter { rentalId ->
-
             findNavController().navigate(
                 R.id.action_rentalRequestListFragment_to_rentalFragment,
                 bundleOf("rentalId" to rentalId)
