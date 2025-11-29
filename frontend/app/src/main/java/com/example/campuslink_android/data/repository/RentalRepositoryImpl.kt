@@ -7,11 +7,12 @@ import com.example.campuslink_android.data.dto.RentalResponseDto
 import com.example.campuslink_android.domain.repository.RentalRepository
 
 class RentalRepositoryImpl(
-    private val rentalApi: RentalApi
+    private val rentalApi: RentalApi,
+    private val tokenStore: TokenStore
 ) : RentalRepository {
 
     override suspend fun requestRental(itemId: Int) {
-        val email = TokenStore.getEmail()
+        val email = tokenStore.getEmail()
             ?: throw IllegalStateException("로그인 이메일 없음")
 
         val body = RentalRequestDto(
@@ -27,7 +28,7 @@ class RentalRepositoryImpl(
     }
 
     override suspend fun getRequestedRentals(): List<RentalResponseDto> {
-        val email = TokenStore.getEmail()
+        val email = tokenStore.getEmail()
             ?: throw IllegalStateException("로그인 필요")
 
         val response = rentalApi.getMyLendings(email)
@@ -39,12 +40,26 @@ class RentalRepositoryImpl(
     }
 
     override suspend fun acceptRental(rentalId: Int) {
-        val email = TokenStore.getEmail()
+        val email = tokenStore.getEmail()
             ?: throw IllegalStateException("로그인 이메일 없음")
 
         val response = rentalApi.acceptRental(rentalId, email)
         if (!response.isSuccessful) {
             throw IllegalStateException("대여 수락 실패: ${response.code()}")
         }
+    }
+
+    // ⭐️ [필수 구현 함수] 이 함수가 없으면 빌드 오류가 발생합니다.
+    override suspend fun getMyRentals(): List<RentalResponseDto> {
+        val email = tokenStore.getEmail()
+            ?: throw IllegalStateException("로그인 필요")
+
+        val response = rentalApi.getMyRentals(email)
+
+        if (!response.isSuccessful) {
+            throw IllegalStateException("내가 빌린 목록 불러오기 실패: ${response.code()}")
+        }
+
+        return response.body()?.data ?: emptyList()
     }
 }

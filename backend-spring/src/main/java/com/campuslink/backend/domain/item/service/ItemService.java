@@ -74,7 +74,6 @@ public class ItemService {
         return savedItem;
     }
 
-
     public Page<ItemListResponse> searchItemDtos(
             String keyword,
             String category,
@@ -86,6 +85,10 @@ public class ItemService {
         return page.map(ItemListResponse::from);
     }
 
+    public Page<ItemListResponse> getMyItems(Integer userId, Pageable pageable) {
+        Page<Item> page = itemRepository.findByUser_UserId(userId, pageable);
+        return page.map(ItemListResponse::from);
+    }
 
     public void deleteItem(Integer itemId, Integer userId) {
         // 1) 아이템 조회

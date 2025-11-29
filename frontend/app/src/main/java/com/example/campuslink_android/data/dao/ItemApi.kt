@@ -12,4 +12,10 @@ interface ItemApi {
         @Query("page") page: Int = 0,
         @Query("size") size: Int = 10
     ): ItemListResponseDto
+    @GET("/api/items/me")
+    suspend fun getMyItems(
+        @Query("userId") userId: Int,
+        @Query("page") page: Int = 0,
+        @Query("size") size: Int = 20
+    ): ItemListResponseDto
 }

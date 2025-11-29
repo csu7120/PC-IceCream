@@ -14,6 +14,7 @@ class ItemFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        // 그냥 테스트용 화면만 띄우게
         return inflater.inflate(R.layout.fragment_item, container, false)
     }
 }

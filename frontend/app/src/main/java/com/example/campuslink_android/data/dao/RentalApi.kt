@@ -24,4 +24,10 @@ interface RentalApi {
     suspend fun getMyLendings(
         @Query("lenderEmail") lenderEmail: String
     ): Response<ApiResponse<List<RentalResponseDto>>>
+
+    // ⭐️ [추가된 부분] 내가 빌린 목록 조회 API
+    @GET("/api/rentals/rentals/me")
+    suspend fun getMyRentals(
+        @Query("renterEmail") renterEmail: String
+    ): Response<ApiResponse<List<RentalResponseDto>>>
 }

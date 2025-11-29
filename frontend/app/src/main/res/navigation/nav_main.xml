@@ -40,5 +40,10 @@
         android:id="@+id/profileFragment"
         android:name="com.example.campuslink_android.ui.profile.ProfileFragment"
         android:label="프로필" />
+    <fragment
+        android:id="@+id/myItemListFragment"
+        android:name="com.example.campuslink_android.ui.item.MyItemListFragment"
+        android:label="내 물품" />
+
 
 </navigation>

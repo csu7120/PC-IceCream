@@ -10,9 +10,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.data.domain.Sort;
 
 import java.io.IOException;
 import java.util.List;
@@ -36,11 +36,9 @@ public class ItemController {
             @RequestPart(value = "images", required = false) List<MultipartFile> files
     ) {
         try {
-            // 사용자 조회
             User user = userRepository.findById(userId)
                     .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
 
-            // Item 엔티티 생성
             Item item = Item.builder()
                     .title(title)
                     .description(description)
@@ -49,7 +47,6 @@ public class ItemController {
                     .user(user)
                     .build();
 
-            // 이미지 포함 저장
             Item saved = itemService.registerItem(item, files);
             return ApiResponse.ok(saved);
 
@@ -62,6 +59,18 @@ public class ItemController {
         }
     }
 
+    // ✅ 내가 올린 물품 조회 API 추가
+    @GetMapping("/me")
+    public ApiResponse<Page<ItemListResponse>> getMyItems(
+            @RequestParam("userId") Integer userId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+        Page<ItemListResponse> result = itemService.getMyItems(userId, pageable);
+        return ApiResponse.ok(result);
+    }
+
     @DeleteMapping("/{itemId}")
     public ApiResponse<String> deleteItem(
             @PathVariable Integer itemId,
@@ -71,7 +80,6 @@ public class ItemController {
             itemService.deleteItem(itemId, userId);
             return ApiResponse.ok("물품이 삭제되었습니다.");
         } catch (IllegalArgumentException | IllegalStateException e) {
-            // 존재하지 않는 물품 / 권한 없는 경우
             return ApiResponse.fail(e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
@@ -79,7 +87,7 @@ public class ItemController {
         }
     }
 
-    // ✅ 목록 + 검색 + 페이징 (DTO로 리턴)
+    // ✅ 전체 목록 + 검색 + 페이징
     @GetMapping
     public ApiResponse<Page<ItemListResponse>> getItems(
             @RequestParam(required = false) String keyword,
@@ -88,15 +96,13 @@ public class ItemController {
             @RequestParam(required = false) Double maxPrice,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "createdAt") String sortBy,   // createdAt, price, title 등
-            @RequestParam(defaultValue = "desc") String direction       // asc or desc
+            @RequestParam(defaultValue = "createdAt") String sortBy,
+            @RequestParam(defaultValue = "desc") String direction
     ) {
-        // 정렬 방향
         Sort.Direction dir = direction.equalsIgnoreCase("asc")
                 ? Sort.Direction.ASC
                 : Sort.Direction.DESC;
 
-        // 정렬 기준 필드
         Pageable pageable = PageRequest.of(page, size, Sort.by(dir, sortBy));
 
         Page<ItemListResponse> result =

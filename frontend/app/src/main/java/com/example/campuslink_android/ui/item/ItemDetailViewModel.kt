@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.campuslink_android.core.network.ApiClient
+import com.example.campuslink_android.core.network.TokenStore // ⭐️ [추가] TokenStore import
 import com.example.campuslink_android.data.dao.RentalApi
 import com.example.campuslink_android.data.repository.RentalRepositoryImpl
 import com.example.campuslink_android.domain.repository.RentalRepository
@@ -43,7 +44,8 @@ class ItemDetailViewModel(
     companion object {
         fun create(): ItemDetailViewModel {
             val api = ApiClient.create(RentalApi::class.java)
-            val repo: RentalRepository = RentalRepositoryImpl(api)
+            // ⭐️ [수정] TokenStore 싱글톤 인스턴스를 함께 전달
+            val repo: RentalRepository = RentalRepositoryImpl(api, TokenStore)
             return ItemDetailViewModel(repo)
         }
     }
