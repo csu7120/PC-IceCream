@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/homeFragment"
+        android:icon="@mipmap/ic_launcher"
+        android:title="홈" />
+
+    <item
+        android:id="@+id/itemFragment"
+        android:icon="@mipmap/ic_launcher"
+        android:title="물품" />
+
+    <item
+        android:id="@+id/rentalFragment"
+        android:icon="@mipmap/ic_launcher"
+    android:title="대여" />
+
+    <item
+        android:id="@+id/profileFragment"
+        android:icon="@mipmap/ic_launcher"
+        android:title="프로필" />
+</menu>

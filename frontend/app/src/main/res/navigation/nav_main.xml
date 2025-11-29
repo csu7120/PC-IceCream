@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_main"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.campuslink_android.ui.home.HomeFragment"
+        android:label="홈" />
+
+    <fragment
+        android:id="@+id/itemFragment"
+        android:name="com.example.campuslink_android.ui.item.ItemFragment"
+        android:label="물품" />
+
+    <fragment
+        android:id="@+id/rentalRequestListFragment"
+        android:name="com.example.campuslink_android.ui.rental.RentalRequestListFragment"
+        android:label="대여 요청 목록">
+
+        <action
+            android:id="@+id/action_rentalRequestListFragment_to_rentalFragment"
+            app:destination="@id/rentalFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/rentalFragment"
+        android:name="com.example.campuslink_android.ui.rental.RentalFragment"
+        android:label="대여">
+
+        <argument
+            android:name="rentalId"
+            app:argType="integer"
+            android:defaultValue="-1" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.campuslink_android.ui.profile.ProfileFragment"
+        android:label="프로필" />
+
+</navigation>
