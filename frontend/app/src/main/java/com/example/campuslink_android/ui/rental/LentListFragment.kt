@@ -16,7 +16,7 @@ import com.example.campuslink_android.core.network.TokenStore
 import com.example.campuslink_android.data.dao.RentalApi
 import com.example.campuslink_android.data.repository.RentalRepositoryImpl
 
-class RentalRequestListFragment : Fragment() {
+class LentListFragment : Fragment() {
 
     private lateinit var viewModel: RentalListViewModel
     private lateinit var adapter: RentalRequestAdapter
@@ -25,7 +25,7 @@ class RentalRequestListFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.fragment_rental_request_list, container, false)
+    ): View? = inflater.inflate(R.layout.fragment_lent_list, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -36,22 +36,24 @@ class RentalRequestListFragment : Fragment() {
         viewModel = ViewModelProvider(this, factory)[RentalListViewModel::class.java]
 
         val recyclerView =
-            view.findViewById<RecyclerView>(R.id.rvRentalRequests).apply {
+            view.findViewById<RecyclerView>(R.id.rvLentRentals).apply {
                 layoutManager = LinearLayoutManager(requireContext())
             }
 
         adapter = RentalRequestAdapter { rentalId ->
             findNavController().navigate(
-                R.id.action_rentalRequestListFragment_to_rentalFragment,
+                R.id.action_lentListFragment_to_rentalFragment,
                 bundleOf("rentalId" to rentalId)
             )
         }
         recyclerView.adapter = adapter
 
         viewModel.list.observe(viewLifecycleOwner) { list ->
-            adapter.submitList(list)
+            val lentOnly = list.filter { it.status != "REQUESTED" }
+            adapter.submitList(lentOnly)
         }
 
+        // 임시: 요청 목록 API에서 빌려준 항목 분리
         viewModel.loadRequestedRentals()
     }
 }

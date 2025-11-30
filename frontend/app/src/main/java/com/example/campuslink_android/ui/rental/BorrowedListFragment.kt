@@ -16,16 +16,16 @@ import com.example.campuslink_android.core.network.TokenStore
 import com.example.campuslink_android.data.dao.RentalApi
 import com.example.campuslink_android.data.repository.RentalRepositoryImpl
 
-class RentalRequestListFragment : Fragment() {
+class BorrowedListFragment : Fragment() {
 
     private lateinit var viewModel: RentalListViewModel
-    private lateinit var adapter: RentalRequestAdapter
+    private lateinit var adapter: BorrowedListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.fragment_rental_request_list, container, false)
+    ) = inflater.inflate(R.layout.fragment_borrowed_list, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -35,23 +35,21 @@ class RentalRequestListFragment : Fragment() {
         val factory = RentalListViewModelFactory(rentalRepository)
         viewModel = ViewModelProvider(this, factory)[RentalListViewModel::class.java]
 
-        val recyclerView =
-            view.findViewById<RecyclerView>(R.id.rvRentalRequests).apply {
-                layoutManager = LinearLayoutManager(requireContext())
-            }
+        val recyclerView = view.findViewById<RecyclerView>(R.id.rvBorrowedRentals)
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        adapter = RentalRequestAdapter { rentalId ->
+        adapter = BorrowedListAdapter { rentalId ->
             findNavController().navigate(
-                R.id.action_rentalRequestListFragment_to_rentalFragment,
+                R.id.action_borrowedListFragment_to_rentalFragment,
                 bundleOf("rentalId" to rentalId)
             )
         }
         recyclerView.adapter = adapter
 
-        viewModel.list.observe(viewLifecycleOwner) { list ->
-            adapter.submitList(list)
+        viewModel.list.observe(viewLifecycleOwner) {
+            adapter.submitList(it)
         }
 
-        viewModel.loadRequestedRentals()
+        viewModel.loadMyRentals()
     }
 }

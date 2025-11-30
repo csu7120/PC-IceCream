@@ -14,6 +14,7 @@
         android:name="com.example.campuslink_android.ui.item.ItemFragment"
         android:label="물품" />
 
+    <!-- 이미 있는: 내가 빌려준 목록(요청 목록) -->
     <fragment
         android:id="@+id/rentalRequestListFragment"
         android:name="com.example.campuslink_android.ui.rental.RentalRequestListFragment"
@@ -22,9 +23,31 @@
         <action
             android:id="@+id/action_rentalRequestListFragment_to_rentalFragment"
             app:destination="@id/rentalFragment" />
-
     </fragment>
 
+    <!-- 내가 빌린 목록 -->
+    <fragment
+        android:id="@+id/borrowedListFragment"
+        android:name="com.example.campuslink_android.ui.rental.BorrowedListFragment"
+        android:label="내가 빌린 목록">
+
+        <action
+            android:id="@+id/action_borrowedListFragment_to_rentalFragment"
+            app:destination="@id/rentalFragment" />
+    </fragment>
+
+    <!-- ⭐ 새로 추가: 내가 빌려준 목록 -->
+    <fragment
+        android:id="@+id/lentListFragment"
+        android:name="com.example.campuslink_android.ui.rental.LentListFragment"
+        android:label="내가 빌려준 목록">
+
+        <action
+            android:id="@+id/action_lentListFragment_to_rentalFragment"
+            app:destination="@id/rentalFragment" />
+    </fragment>
+
+    <!-- 대여 상세 -->
     <fragment
         android:id="@+id/rentalFragment"
         android:name="com.example.campuslink_android.ui.rental.RentalFragment"
@@ -40,10 +63,16 @@
         android:id="@+id/profileFragment"
         android:name="com.example.campuslink_android.ui.profile.ProfileFragment"
         android:label="프로필" />
+
     <fragment
         android:id="@+id/myItemListFragment"
         android:name="com.example.campuslink_android.ui.item.MyItemListFragment"
         android:label="내 물품" />
 
+    <!-- 설정 -->
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.example.campuslink_android.ui.profile.SettingsFragment"
+        android:label="설정" />
 
 </navigation>

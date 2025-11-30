@@ -7,5 +7,6 @@ data class RentalResponseDto(
     val lenderId: Int,
     val startAt: String,
     val endAt: String,
-    val status: String
+    val status: String,
+    val Price: Int
 )

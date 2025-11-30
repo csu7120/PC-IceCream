@@ -5,6 +5,11 @@ import com.example.campuslink_android.data.dao.ItemApi
 import com.example.campuslink_android.data.mapper.toDomain
 import com.example.campuslink_android.domain.model.Item
 import com.example.campuslink_android.domain.repository.ItemRepository
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
+import java.io.File
 
 class ItemRepositoryImpl(
     private val itemApi: ItemApi,
@@ -40,5 +45,45 @@ class ItemRepositoryImpl(
         val content = pageDto.content ?: emptyList()
         return content.map { it.toDomain() }
     }
-}
 
+    // ⭐ 물품 등록
+    override suspend fun registerItem(
+        title: String,
+        description: String?,
+        price: Double,
+        category: String,
+        userId: Int,
+        images: List<File>?
+    ): Item {
+
+        val titleRb = title.toRequestBody("text/plain".toMediaType())
+        val descRb = description?.toRequestBody("text/plain".toMediaType())
+        val priceRb = price.toString().toRequestBody("text/plain".toMediaType())
+        val categoryRb = category.toRequestBody("text/plain".toMediaType())
+        val userIdRb = userId.toString().toRequestBody("text/plain".toMediaType())
+
+        val imageParts = images?.mapIndexed { index, file ->
+            val reqFile = file.asRequestBody("image/*".toMediaType())
+            MultipartBody.Part.createFormData(
+                "images",
+                "image_$index.jpg",
+                reqFile
+            )
+        }
+
+        val response = itemApi.registerItem(
+            title = titleRb,
+            description = descRb,
+            price = priceRb,
+            category = categoryRb,
+            userId = userIdRb,
+            images = imageParts
+        )
+
+        if (!response.success) {
+            throw IllegalStateException(response.message ?: "물품 등록 실패")
+        }
+
+        return response.toDomain()
+    }
+}

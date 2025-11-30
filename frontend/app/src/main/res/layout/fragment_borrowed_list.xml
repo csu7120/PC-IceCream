@@ -6,7 +6,7 @@
     android:padding="16dp">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvRentalRequests"
+        android:id="@+id/rvBorrowedRentals"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

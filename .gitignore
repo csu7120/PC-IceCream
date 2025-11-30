@@ -51,3 +51,9 @@ misc.xml
 deploymentTargetDropDown.xml
 render.experimental.xml
 /.metadata/
+.gradle/
+build/
+local.properties
+.idea/workspace.xml
+.idea/deploymentTargetDropDown.xml
+.idea/gradle.xml

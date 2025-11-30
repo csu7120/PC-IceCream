@@ -25,7 +25,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RentalService {
 
-	private final NotificationService notificationService;
+    private final NotificationService notificationService;
     private final RentalRepository rentalRepository;
     private final RentPolicyRepository rentPolicyRepository;
     private final ItemRepository itemRepository;
@@ -85,7 +85,7 @@ public class RentalService {
                 .build();
 
         Rental saved = rentalRepository.save(rental);
-     //대여 요청 → 물건 주인에게 전달
+        // 대여 요청 → 물건 주인에게 전달
         notificationService.notifyUser(
                 lender.getUserId(),
                 "RENT_REQUEST",
@@ -106,7 +106,7 @@ public class RentalService {
         }
 
         rental.setStatus(RentalStatus.ACCEPTED);
-     //대여 수락 → 빌리는 사람에게 전달
+        // 대여 수락 → 빌리는 사람에게 전달
         notificationService.notifyUser(
                 rental.getRenter().getUserId(),
                 "RENT_ACCEPTED",
@@ -160,7 +160,7 @@ public class RentalService {
         return toResponse(rental);
     }
 
-    // ✅ 반납 API
+    // 반납 API
     @Transactional
     public RentalResponse returnRental(String userEmail, Integer rentalId) {
         Rental rental = getRental(rentalId);
@@ -196,11 +196,11 @@ public class RentalService {
         }
 
         rental.setStatus(RentalStatus.RETURNED);
-     //반납 완료 → 물건 주인에게 전달
+        // 반납 완료 → 물건 주인에게 전달
         notificationService.notifyUser(
-                rental.getLender().getUserId(),
-                "RENT_RETURNED",
-                "[반납 완료] '" + rental.getItem().getTitle() + "' 반납이 완료되었습니다."
+            rental.getLender().getUserId(),
+            "RENT_RETURNED",
+            "[반납 완료] '" + rental.getItem().getTitle() + "' 반납이 완료되었습니다."
         );
 
         Item item = rental.getItem();
@@ -211,7 +211,7 @@ public class RentalService {
         return toResponse(rental);
     }
 
-    // ✅✅✅ 자동 연체 전환 메서드 (스케줄러가 호출)
+    // 자동 연체 전환 (스케줄러용)
     @Transactional
     public void markLateRentals() {
         java.time.LocalDateTime now = java.time.LocalDateTime.now();
