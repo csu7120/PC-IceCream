@@ -7,6 +7,7 @@ import com.example.campuslink_android.data.dto.ChatRoomResponseDto
 import com.example.campuslink_android.data.dto.SendMessageRequest
 import com.example.campuslink_android.domain.repository.ChatRepository
 import okhttp3.MultipartBody
+import android.util.Log
 
 class ChatRepositoryImpl(
     private val api: ChatApi,
@@ -48,7 +49,20 @@ class ChatRepositoryImpl(
     }
 
     override suspend fun getChatRooms(): List<ChatRoomResponseDto> {
-        val response = api.getMyChatRooms()
-        return response.data ?: emptyList()
+        try {
+            val response = api.getMyChatRooms()
+
+            Log.d("ChatRepository", "📥 API raw response = $response")
+            Log.d("ChatRepository", "📥 success = ${response.success}")
+            Log.d("ChatRepository", "📥 data = ${response.data}")
+
+            return response.data ?: emptyList()
+
+        } catch (e: Exception) {
+            Log.e("ChatRepository", "❌ Error while fetching chat rooms", e)
+            return emptyList()
+        }
     }
+
+
 }

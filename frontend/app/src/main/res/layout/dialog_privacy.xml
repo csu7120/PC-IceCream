@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="#80000000">
+
+    <!-- 중앙 팝업 카드 박스 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:padding="20dp"
+        android:background="@android:color/white"
+        android:elevation="8dp"
+        android:gravity="center_horizontal">
+
+        <ScrollView
+            android:id="@+id/scrollViewPrivacy"
+            android:layout_width="match_parent"
+            android:layout_height="300dp">
+
+            <TextView
+                android:id="@+id/tvPrivacyContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="13sp"
+                android:lineSpacingExtra="4dp"
+                android:text="공고일: 2025년 12월 03일    시행일: 2025년 12월 03일
+제30조(개인정보 처리방침의 수립 및 공개)① 개인정보처리자는 다음 각 호의 사항이 포함된 개인정보의 처리 방침(이하 “개인정보 처리방침”이라 한다)을 정하여야 한다.&lt;개정 2016. 3. 29., 2020. 2. 4., 2023. 3. 14.&gt;
+1. 개인정보의 처리 목적
+2. 개인정보의 처리 및 보유 기간
+3. 개인정보의 제3자 제공에 관한 사항
+3의2. 개인정보의 파기절차 및 파기방법
+3의3. 민감정보 공개 가능성 및 선택 방법
+4. 개인정보처리 위탁에 관한 사항
+5. 정보주체와 법정대리인의 권리ㆍ의무 및 행사방법
+6. 개인정보 보호책임자 정보
+7. 개인정보 자동 수집 장치의 설치·운영 및 거부
+8. 그 밖에 대통령령으로 정한 사항
+
+제31조(개인정보 보호책임자의 지정 등)① 개인정보처리자는 개인정보 보호책임자를 지정하여야 한다.&lt;개정 2023. 3. 14.&gt;
+② 대표자가 개인정보 보호책임자가 된다.&lt;신설 2023. 3. 14.&gt;
+③ 개인정보 보호책임자의 업무
+- 개인정보 보호 계획의 수립 및 시행
+- 개인정보 처리 실태의 조사 및 개선
+- 개인정보 처리 관련 불만 처리
+- 개인정보 유출 방지 및 내부통제 운영
+- 개인정보 보호 교육 시행
+- 개인정보파일 관리·감독
+
+2. 처리하는 개인정보 항목
+필수: 이메일, 비밀번호
+선택: 닉네임, 프로필 사진 URL
+자동수집: 접속 로그, 기기정보
+
+3. 개인정보의 처리 및 보유기간
+회원 탈퇴 시까지
+접속 로그·기기정보는 3년 보관
+
+4. 개인정보의 파기 방법
+전자 파일은 복구 불가 방식으로 삭제
+종이 문서는 분쇄 또는 소각
+
+5. 개인정보의 제3자 제공
+원칙적으로 제공하지 않음
+예외 시 이용자 사전 동의 필요
+
+6. 개인정보 처리 위탁
+Google Analytics – 서비스 이용 통계 분석
+
+7. 개인정보 보호책임자
+최성언 / CampusLink 개발팀
+이메일: csungunity@gmail.com
+전화: 010-2596-2153
+
+10. 개인정보 처리방침 변경
+2025년 12월 03일부터 적용됨"/>
+        </ScrollView>
+
+        <Button
+            android:id="@+id/btnPrivacyAgree"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginTop="16dp"
+            android:text="동의합니다"
+            android:enabled="false"/>
+    </LinearLayout>
+
+</FrameLayout>

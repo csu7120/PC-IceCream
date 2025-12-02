@@ -80,12 +80,11 @@ public class ChatController {
         }
     }
     @GetMapping("/rooms")
-    public ApiResponse<List<ChatRoomResponse>> getMyChatRooms(
-            Authentication authentication
-    ) {
-        Integer meId = currentUserId(authentication);
+    public ApiResponse<List<ChatRoomResponse>> getRooms(Authentication auth) {
+        Integer meId = currentUserId(auth);
         return ApiResponse.ok(chatService.getMyChatRooms(meId));
     }
+
 
     
 }
