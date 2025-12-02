@@ -55,8 +55,7 @@
 
         <argument
             android:name="rentalId"
-            app:argType="integer"
-            android:defaultValue="-1" />
+            app:argType="integer"/>
     </fragment>
 
     <fragment
@@ -69,6 +68,10 @@
         android:name="com.example.campuslink_android.ui.item.MyItemListFragment"
         android:label="내 물품" />
 
+    <fragment
+        android:id="@+id/chatListFragment"
+        android:name="com.example.campuslink_android.ui.chat.ChatListFragment"
+        android:label="채팅" />
     <!-- 설정 -->
     <fragment
         android:id="@+id/settingsFragment"

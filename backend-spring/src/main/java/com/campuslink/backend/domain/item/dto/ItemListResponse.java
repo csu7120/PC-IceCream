@@ -8,13 +8,15 @@ import lombok.Getter;
 @Builder
 public class ItemListResponse {
 
-    private Integer itemId;
+	private Integer itemId;
     private String title;
     private String category;
     private Double price;
-    private String thumbnailUrl;   // 첫 번째 이미지
-    private String ownerName;      // 등록자 이름
-
+    private String thumbnailUrl;
+    private Integer ownerId;   // ← 이것 추가해야 함
+    private String ownerName;
+    private String status;
+    
     public static ItemListResponse from(Item item) {
         String thumb = null;
 

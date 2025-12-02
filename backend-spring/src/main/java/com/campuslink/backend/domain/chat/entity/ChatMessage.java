@@ -1,63 +1,42 @@
 package com.campuslink.backend.domain.chat.entity;
 
-import com.campuslink.backend.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "chat_messages")
 @Getter
-@Setter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
 public class ChatMessage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "message_id")
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "chat_id", nullable = false)
-    private ChatRoom chat;
+    private Integer chatId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sender_id", nullable = false)
-    private User sender;
+    private Integer senderId;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "message_type", nullable = false, length = 20)
-    private MessageType messageType;
+    private MessageType messageType;   // TEXT, IMAGE, LOCATION
 
-    @Column(name = "content", columnDefinition = "text")
+    // ------ TEXT 메시지 ------
+    @Column(length = 1000)
     private String content;
 
-    @Column(name = "image_url")
+    // ------ IMAGE 메시지 ------
+    @Column(length = 500)
     private String imageUrl;
 
-    @Column(name = "latitude", precision = 10, scale = 7)
-    private BigDecimal latitude;
+    // ------ LOCATION 메시지 ------
+    private Double latitude;
+    private Double longitude;
 
-    @Column(name = "longitude", precision = 10, scale = 7)
-    private BigDecimal longitude;
-
-    @Column(name = "location_label")
+    @Column(length = 255)
     private String locationLabel;
 
-    @Column(name = "sent_at", nullable = false)
     private LocalDateTime sentAt;
-
-    @Column(name = "is_read", nullable = false)
-    private boolean read;
-
-    @PrePersist
-    public void onCreate() {
-        if (sentAt == null) {
-            sentAt = LocalDateTime.now();
-        }
-    }
 }

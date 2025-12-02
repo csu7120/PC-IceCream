@@ -96,6 +96,14 @@ class ProfileFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+
+        val userId = TokenStore.getUserId()
+
+        if (userId == null) {
+            // 로그인 안 되어 있으면 API 호출 중단
+            return
+        }
+
         viewModel.loadMyInfo()
     }
 }

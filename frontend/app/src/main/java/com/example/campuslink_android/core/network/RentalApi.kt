@@ -2,12 +2,10 @@ package com.example.campuslink_android.core.network
 
 import com.example.campuslink_android.data.dto.RentalRequestDto
 import com.example.campuslink_android.data.dto.RentalResponseDto
-import com.example.campuslink_android.core.network.ApiResponse
 import retrofit2.Response
 import retrofit2.http.*
 
 interface RentalApi {
-
     /**
      * 1. 대여 요청 보내기
      *
@@ -17,10 +15,7 @@ interface RentalApi {
     suspend fun requestRental(
         @Query("email") email: String,
         @Body body: RentalRequestDto
-    ): Response<ApiResponse<RentalResponseDto>>
-
-
-
+    ): Response<NetworkResponse<RentalResponseDto>>
     /**
      * 2. 대여 요청 수락하기
      *
@@ -28,11 +23,9 @@ interface RentalApi {
      */
     @POST("/api/rentals/{id}/accept")
     suspend fun acceptRental(
-        @Path("id") rentalId: Int,
-        @Query("lenderEmail") lenderEmail: String
-    ): Response<ApiResponse<RentalResponseDto>>
-
-
+        @Header("Authorization") token: String,
+        @Path("id") id: Int
+    ): Response<NetworkResponse<RentalResponseDto>>
 
     /**
      * 3. 내가 빌려준 목록 (LENDER)
@@ -42,10 +35,7 @@ interface RentalApi {
     @GET("/api/rentals/lendings/me")
     suspend fun getMyLendings(
         @Query("lenderEmail") lenderEmail: String
-    ): Response<ApiResponse<List<RentalResponseDto>>>
-
-
-
+    ): Response<NetworkResponse<List<RentalResponseDto>>>
     /**
      * 4. 내가 빌린 목록 (RENTER)
      *
@@ -54,5 +44,5 @@ interface RentalApi {
     @GET("/api/rentals/borrowings/me")
     suspend fun getMyRentals(
         @Query("renterEmail") renterEmail: String
-    ): Response<ApiResponse<List<RentalResponseDto>>>
+    ): Response<NetworkResponse<List<RentalResponseDto>>>
 }

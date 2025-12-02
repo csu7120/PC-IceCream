@@ -2,12 +2,9 @@ package com.campuslink.backend.domain.chat.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "chat_rooms")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -17,12 +14,16 @@ public class ChatRoom {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "chat_id")
     private Integer id;
 
-    @OneToMany(mappedBy = "chat", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ChatMember> members = new ArrayList<>();
+    // 일반 1:1 채팅용
+    private Integer user1Id;
+    private Integer user2Id;
 
-    @OneToMany(mappedBy = "chat", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ChatMessage> messages = new ArrayList<>();
+    // 물품 기반 채팅용
+    private Integer itemId;
+    private Integer lenderId;
+    private Integer renterId;
+
+    private LocalDateTime createdAt;
 }

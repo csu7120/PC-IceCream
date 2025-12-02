@@ -24,6 +24,10 @@ class LoginViewModel(
             _loginState.value = LoginState.Loading
             try {
                 val user: User = authRepository.login(email, password)
+
+                // ⭐ 로그인 성공 → 이메일 저장 ⭐
+                TokenStore.saveEmail(email)
+
                 _loginState.value = LoginState.Success(user)
             } catch (e: Exception) {
                 e.printStackTrace()

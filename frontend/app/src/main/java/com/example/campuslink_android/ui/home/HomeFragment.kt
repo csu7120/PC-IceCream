@@ -1,5 +1,6 @@
 package com.example.campuslink_android.ui.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.campuslink_android.R
 import com.example.campuslink_android.ui.item.ItemDetailActivity
+import com.example.campuslink_android.ui.item.RegisterItemActivity
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class HomeFragment : Fragment() {
 
@@ -41,6 +44,14 @@ class HomeFragment : Fragment() {
         rvItems.layoutManager = LinearLayoutManager(requireContext())
         rvItems.adapter = adapter
 
+        // ⭐ "+ 등록하기" 버튼 클릭 이벤트
+        val fab = view.findViewById<FloatingActionButton>(R.id.btnGoRegister)
+        fab.setOnClickListener {
+            val intent = Intent(requireContext(), RegisterItemActivity::class.java)
+            startActivity(intent)
+        }
+
+        // 데이터 로드
         viewModel.loadItems()
 
         viewModel.items.observe(viewLifecycleOwner, Observer { list ->

@@ -20,7 +20,9 @@ class AuthRepositoryImpl(
             expiresInMinutes = response.expiresInMinutes,
             userId = response.userId
         )
-        tokenStore.saveEmail(response.email)
+
+        // ⭐ 반드시 사용자가 입력한 email 저장
+        tokenStore.saveEmail(email)
 
         return response.toDomainUser()
     }

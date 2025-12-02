@@ -6,6 +6,7 @@ import com.campuslink.backend.domain.rental.dto.RentalResponse;
 import com.campuslink.backend.domain.rental.service.RentalService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,7 +18,9 @@ public class RentalController {
 
     private final RentalService rentalService;
 
-    // 대여 요청
+    // ------------------------------------------------------
+    // 1. 대여 요청
+    // ------------------------------------------------------
     @PostMapping
     public ApiResponse<RentalResponse> requestRental(
             @RequestParam String email,
@@ -26,16 +29,31 @@ public class RentalController {
         return ApiResponse.ok(rentalService.requestRental(email, req));
     }
 
-    // 대여 수락
+    // ------------------------------------------------------
+    // 2. 대여 수락 (JWT 인증 기반)
+    // ------------------------------------------------------
     @PostMapping("/{id}/accept")
     public ApiResponse<RentalResponse> acceptRental(
             @PathVariable Integer id,
-            @RequestParam String lenderEmail
+            Authentication auth
     ) {
+
+        System.out.println("🔥 [ACCEPT] API called → rentalId = " + id);
+
+        if (auth == null) {
+            System.out.println("❌ [ACCEPT] Authentication is NULL — JWT가 전달되지 않음!");
+            throw new RuntimeException("JWT Authentication is missing.");
+        }
+
+        String lenderEmail = auth.getName(); // JWT subject = email
+        System.out.println("🔥 [ACCEPT] Authenticated user email = " + lenderEmail);
+
         return ApiResponse.ok(rentalService.acceptRental(lenderEmail, id));
     }
 
-    // 대여 취소 (요청자든 빌려주는 사람이든 가능하니까 userEmail로 통일)
+    // ------------------------------------------------------
+    // 3. 대여 취소
+    // ------------------------------------------------------
     @PostMapping("/{id}/cancel")
     public ApiResponse<RentalResponse> cancelRental(
             @PathVariable Integer id,
@@ -44,7 +62,9 @@ public class RentalController {
         return ApiResponse.ok(rentalService.cancelRental(userEmail, id));
     }
 
-    // 픽업(=대여 시작) -> IN_USE로 전환
+    // ------------------------------------------------------
+    // 4. 픽업(대여 시작)
+    // ------------------------------------------------------
     @PostMapping("/{id}/pickup")
     public ApiResponse<RentalResponse> pickupRental(
             @PathVariable Integer id,
@@ -53,7 +73,9 @@ public class RentalController {
         return ApiResponse.ok(rentalService.pickupRental(userEmail, id));
     }
 
-    // 반납 -> RETURNED로 전환
+    // ------------------------------------------------------
+    // 5. 반납
+    // ------------------------------------------------------
     @PostMapping("/{id}/return")
     public ApiResponse<RentalResponse> returnRental(
             @PathVariable Integer id,
@@ -62,7 +84,9 @@ public class RentalController {
         return ApiResponse.ok(rentalService.returnRental(userEmail, id));
     }
 
-    // ✅ 내가 빌린 목록 (프론트/포스트맨이 호출하는 /borrowings/me 로 변경)
+    // ------------------------------------------------------
+    // 6. 내가 빌린 목록
+    // ------------------------------------------------------
     @GetMapping("/borrowings/me")
     public ApiResponse<List<RentalResponse>> myRentals(
             @RequestParam String renterEmail
@@ -70,7 +94,9 @@ public class RentalController {
         return ApiResponse.ok(rentalService.myRentals(renterEmail));
     }
 
-    // 내가 빌려준 목록
+    // ------------------------------------------------------
+    // 7. 내가 빌려준 목록
+    // ------------------------------------------------------
     @GetMapping("/lendings/me")
     public ApiResponse<List<RentalResponse>> myLendings(
             @RequestParam String lenderEmail

@@ -5,7 +5,9 @@ data class Item(
     val title: String,
     val category: String,
     val price: Double,
+    val ownerId: Int,
     val ownerName: String,
     val thumbnailUrl: String?,
     val status: String?
 )
+

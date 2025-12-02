@@ -4,10 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.campuslink_android.R
@@ -15,7 +13,10 @@ import com.example.campuslink_android.core.network.ApiClient
 import com.example.campuslink_android.core.network.TokenStore
 import com.example.campuslink_android.data.dao.RentalApi
 import com.example.campuslink_android.data.repository.RentalRepositoryImpl
-
+import androidx.lifecycle.lifecycleScope   // ← 추가됨
+import kotlinx.coroutines.launch         // ← 추가됨
+import android.util.Log
+import android.widget.Toast
 class RentalRequestListFragment : Fragment() {
 
     private lateinit var viewModel: RentalListViewModel
@@ -35,23 +36,37 @@ class RentalRequestListFragment : Fragment() {
         val factory = RentalListViewModelFactory(rentalRepository)
         viewModel = ViewModelProvider(this, factory)[RentalListViewModel::class.java]
 
-        val recyclerView =
-            view.findViewById<RecyclerView>(R.id.rvRentalRequests).apply {
-                layoutManager = LinearLayoutManager(requireContext())
-            }
+        val recyclerView = view.findViewById<RecyclerView>(R.id.rvRentalRequests).apply {
+            layoutManager = LinearLayoutManager(requireContext())
+        }
 
         adapter = RentalRequestAdapter { rentalId ->
-            findNavController().navigate(
-                R.id.action_rentalRequestListFragment_to_rentalFragment,
-                bundleOf("rentalId" to rentalId)
-            )
+            Log.e("DEBUG", "Accept clicked rentalId=$rentalId")
+            lifecycleScope.launch {
+                viewModel.acceptRental(rentalId)
+            }
         }
+
         recyclerView.adapter = adapter
 
+        // 리스트 옵저버
         viewModel.list.observe(viewLifecycleOwner) { list ->
             adapter.submitList(list)
         }
 
+        // ⭐⭐⭐ 수락 결과 옵저버 — 반드시 추가해야 UI가 갱신됨!!!
+        viewModel.acceptResult.observe(viewLifecycleOwner) { success ->
+            if (success == true) {
+                Toast.makeText(requireContext(), "대여 수락 완료!", Toast.LENGTH_SHORT).show()
+
+                // 목록 새로고침
+                viewModel.loadRequestedRentals()
+            } else {
+                Toast.makeText(requireContext(), "대여 수락 실패", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        // 초기 목록 로드
         viewModel.loadRequestedRentals()
     }
 }

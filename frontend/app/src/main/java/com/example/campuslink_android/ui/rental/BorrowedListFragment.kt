@@ -18,7 +18,7 @@ import com.example.campuslink_android.data.repository.RentalRepositoryImpl
 
 class BorrowedListFragment : Fragment() {
 
-    private lateinit var viewModel: RentalListViewModel
+    private lateinit var viewModel: BorrowedListViewModel
     private lateinit var adapter: BorrowedListAdapter
 
     override fun onCreateView(
@@ -32,8 +32,9 @@ class BorrowedListFragment : Fragment() {
 
         val rentalApi = ApiClient.create(RentalApi::class.java)
         val rentalRepository = RentalRepositoryImpl(rentalApi, TokenStore)
-        val factory = RentalListViewModelFactory(rentalRepository)
-        viewModel = ViewModelProvider(this, factory)[RentalListViewModel::class.java]
+
+        val factory = BorrowedListViewModelFactory(rentalRepository)
+        viewModel = ViewModelProvider(this, factory)[BorrowedListViewModel::class.java]
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.rvBorrowedRentals)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -46,10 +47,12 @@ class BorrowedListFragment : Fragment() {
         }
         recyclerView.adapter = adapter
 
+        // 관찰
         viewModel.list.observe(viewLifecycleOwner) {
             adapter.submitList(it)
         }
 
+        // ★ 여기가 핵심 — BorrowedListViewModel 의 loadMyRentals() 호출
         viewModel.loadMyRentals()
     }
 }

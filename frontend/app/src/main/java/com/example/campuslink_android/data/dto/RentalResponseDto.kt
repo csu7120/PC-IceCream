@@ -6,7 +6,8 @@ data class RentalResponseDto(
     val borrowerId: Int,
     val lenderId: Int,
     val startAt: String,
+    val lenderEmail: String,
     val endAt: String,
     val status: String,
-    val Price: Int
+    val price: Int
 )

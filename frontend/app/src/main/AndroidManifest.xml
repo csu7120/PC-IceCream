@@ -26,7 +26,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <activity android:name=".ui.item.RegisterItemActivity" />
         <activity
             android:name=".ui.auth.AuthEntryActivity"
             android:exported="false" />
@@ -47,6 +47,10 @@
         <activity
             android:name=".ui.item.ItemDetailActivity"
             android:exported="false" />
+        <activity
+            android:name=".ui.chat.ChatRoomActivity"
+            android:exported="true"
+            android:screenOrientation="portrait" />
 
 
     </application>

@@ -26,7 +26,7 @@ class BorrowedListAdapter(
 
         fun bind(item: RentalResponseDto) {
             txtTitle.text = "Rental ID: ${item.rentalId} / Item: ${item.itemId}"
-            txtPrice.text = "대여요금: ${item.Price}원"
+            txtPrice.text = "대여요금: ${item.price}원"
             txtStatus.text = "상태: ${item.status}"
 
             itemView.setOnClickListener { onClick(item.rentalId) }

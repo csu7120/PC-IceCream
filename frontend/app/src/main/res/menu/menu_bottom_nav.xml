@@ -12,10 +12,9 @@
         android:title="물품" />
 
     <item
-        android:id="@+id/rentalFragment"
+        android:id="@+id/chatListFragment"
         android:icon="@mipmap/ic_launcher"
-    android:title="대여" />
-
+        android:title="채팅" />
     <item
         android:id="@+id/profileFragment"
         android:icon="@mipmap/ic_launcher"

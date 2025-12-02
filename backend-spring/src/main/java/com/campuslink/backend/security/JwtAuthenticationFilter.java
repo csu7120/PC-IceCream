@@ -52,7 +52,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String header = request.getHeader("Authorization");
         if (!StringUtils.hasText(header) || !header.startsWith("Bearer ")) {
             return null;
+            
         }
+        
         return header.substring(7);
     }
+    
 }
+

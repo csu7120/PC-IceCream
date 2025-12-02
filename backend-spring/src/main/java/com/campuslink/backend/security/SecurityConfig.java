@@ -38,19 +38,21 @@ public class SecurityConfig {
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 // URL별 접근 권한
                 .authorizeHttpRequests(auth -> auth
-                        // 로그인/회원가입은 토큰 없이 접근 허용
                         .requestMatchers("/api/auth/**").permitAll()
 
-                        // 리뷰 API: 반드시 JWT 필요
+                        // 리뷰는 인증 필요
                         .requestMatchers("/api/reviews/**").authenticated()
 
-                        // 채팅 관련 REST API: 반드시 JWT 필요 (경로는 너가 실제 쓰는대로 수정 가능)
-                        .requestMatchers("/api/chat/**").authenticated()
+                        // 채팅도 인증 필요
+                        .requestMatchers("/api/chat/**", "/api/chats/**").authenticated()
 
-                        // WebSocket 핸드셰이크 엔드포인트도 JWT 필요하게 (엔드포인트에 맞게 수정)
-                        .requestMatchers("/ws/**").authenticated()
+                        // 렌탈도 인증 필요 ‼️ 여기 추가됨
+                        .requestMatchers("/api/rentals/**").authenticated()
 
-                        // 그 외 나머지 모든 요청은 토큰 없이 접근 허용
+                        // WebSocket 역시
+                        .requestMatchers("/ws/**").permitAll()
+
+                        // 그 외는 허용
                         .anyRequest().permitAll()
                 )
                 // UsernamePasswordAuthenticationFilter 앞에 JWT 필터 추가
