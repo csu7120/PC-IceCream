@@ -1,9 +1,7 @@
 package com.example.campuslink_android.ui.rental
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -25,7 +23,7 @@ class LentListFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.fragment_lent_list, container, false)
+    ) = inflater.inflate(R.layout.fragment_lent_list, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -49,11 +47,10 @@ class LentListFragment : Fragment() {
         recyclerView.adapter = adapter
 
         viewModel.list.observe(viewLifecycleOwner) { list ->
-            val lentOnly = list.filter { it.status != "REQUESTED" }
-            adapter.submitList(lentOnly)
+            adapter.submitList(list)
         }
 
-        // 임시: 요청 목록 API에서 빌려준 항목 분리
-        viewModel.loadRequestedRentals()
+        // 🔥 여기 수정됨: “내가 빌려준 목록” 호출
+        viewModel.loadMyLendings()
     }
 }

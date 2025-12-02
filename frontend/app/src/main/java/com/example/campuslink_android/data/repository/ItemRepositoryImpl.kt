@@ -31,6 +31,7 @@ class ItemRepositoryImpl(
         return content.map { it.toDomain() }
     }
 
+
     // 내가 올린 물품
     override suspend fun getMyItems(userId: Int): List<Item> {
         val response = itemApi.getMyItems(userId)
@@ -46,7 +47,8 @@ class ItemRepositoryImpl(
         return content.map { it.toDomain() }
     }
 
-    // ⭐ 물품 등록
+
+    // 물품 등록
     override suspend fun registerItem(
         title: String,
         description: String?,
@@ -80,10 +82,7 @@ class ItemRepositoryImpl(
             images = imageParts
         )
 
-        if (!response.success) {
-            throw IllegalStateException(response.message ?: "물품 등록 실패")
-        }
-
+        // ★ 등록 API는 success/message 가 없음 → 바로 domain 변환
         return response.toDomain()
     }
 }

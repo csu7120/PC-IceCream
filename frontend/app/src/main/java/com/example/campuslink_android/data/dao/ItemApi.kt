@@ -24,7 +24,7 @@ interface ItemApi {
         @Query("size") size: Int = 20
     ): ItemListResponseDto
 
-    // ⭐ 물품 등록 API (추가되는 부분)
+    // 물품 등록
     @Multipart
     @POST("/api/items")
     suspend fun registerItem(
@@ -34,5 +34,5 @@ interface ItemApi {
         @Part("category") category: RequestBody,
         @Part("userId") userId: RequestBody,
         @Part images: List<MultipartBody.Part>? = null,
-    ): ItemResponseDto
+    ): ItemResponseDto // 성공 시 단일 아이템 반환
 }
