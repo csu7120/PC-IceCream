@@ -51,6 +51,10 @@
             android:name=".ui.chat.ChatRoomActivity"
             android:exported="true"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.notification.NotificationActivity"
+            android:exported="false" />
+
 
 
     </application>

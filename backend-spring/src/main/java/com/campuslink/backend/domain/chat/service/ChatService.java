@@ -131,7 +131,7 @@ public class ChatService {
             file.transferTo(savePath.toFile());
 
             return "/uploads/chat/" + fileName;
-        } catch (Exception e) { ,
+        } catch (Exception e) { 
             throw new RuntimeException("이미지 업로드 실패: " + e.getMessage());
         }
     }

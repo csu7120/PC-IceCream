@@ -33,4 +33,17 @@ interface RentalApi {
     suspend fun getMyRentals(
         @Query("renterEmail") renterEmail: String
     ): Response<NetworkResponse<List<RentalResponseDto>>>
+    // 픽업
+    @POST("/api/rentals/{id}/pickup")
+    suspend fun pickupRental(
+        @Path("id") rentalId: Int,
+        @Query("userEmail") userEmail: String
+    ): Response<NetworkResponse<RentalResponseDto>>
+    // 반납
+    @POST("/api/rentals/{id}/return")
+    suspend fun returnRental(
+        @Path("id") rentalId: Int,
+        @Query("userEmail") userEmail: String
+    ): Response<NetworkResponse<RentalResponseDto>>
+
 }

@@ -8,6 +8,9 @@ data class Item(
     val ownerId: Int,
     val ownerName: String,
     val thumbnailUrl: String?,
-    val status: String?
+    val status: String?,
+
+    val description: String? = null,
+    val imageUrl: String? = null
 )
 

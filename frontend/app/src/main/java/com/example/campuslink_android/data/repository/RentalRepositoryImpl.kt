@@ -95,4 +95,18 @@ class RentalRepositoryImpl(
             emptyList()
         }
     }
+    override suspend fun pickupRental(rentalId: Int) {
+        val email = tokenStore.getEmail() ?: error("로그인 필요")
+        val res = rentalApi.pickupRental(rentalId, email)
+        if (!res.isSuccessful) throw IllegalStateException("픽업 실패")
+    }
+
+    override suspend fun returnRental(rentalId: Int) {
+        val email = tokenStore.getEmail() ?: error("로그인 필요")
+        val res = rentalApi.returnRental(rentalId, email)
+        if (!res.isSuccessful) throw IllegalStateException("반납 실패")
+    }
+
+
 }
+

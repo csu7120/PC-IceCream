@@ -9,4 +9,6 @@ interface RentalRepository {
 
     // ⭐️ [추가된 부분] 내가 빌린 목록 조회 함수
     suspend fun getMyRentals(): List<RentalResponseDto>
+    suspend fun pickupRental(rentalId: Int)
+    suspend fun returnRental(rentalId: Int)
 }

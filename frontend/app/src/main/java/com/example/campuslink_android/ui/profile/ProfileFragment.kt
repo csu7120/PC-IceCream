@@ -32,6 +32,15 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val btnPickup = view.findViewById<Button>(R.id.btnPickup)
+        btnPickup.setOnClickListener {
+            findNavController().navigate(R.id.pickupListFragment)
+        }
+        val btnReturn = view.findViewById<Button>(R.id.btnReturn)
+        btnReturn.setOnClickListener {
+            findNavController().navigate(R.id.returnListFragment)
+        }
+
         val imgProfile = view.findViewById<ImageView>(R.id.imgProfile)
         val txtName = view.findViewById<TextView>(R.id.txtName)
         val txtEmail = view.findViewById<TextView>(R.id.txtEmail)
@@ -45,6 +54,7 @@ class ProfileFragment : Fragment() {
         val btnLent = view.findViewById<Button>(R.id.btnLent)
         val btnSettings = view.findViewById<Button>(R.id.btnSettings)
         val btnLogout = view.findViewById<Button>(R.id.btnLogout)
+
 
         viewModel.loadMyInfo()
 

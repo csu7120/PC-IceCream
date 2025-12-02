@@ -7,15 +7,21 @@ import androidx.lifecycle.viewModelScope
 import com.example.campuslink_android.core.network.ApiClient
 import com.example.campuslink_android.core.network.TokenStore
 import com.example.campuslink_android.data.dao.ItemApi
+import com.example.campuslink_android.data.dao.NotificationApi
 import com.example.campuslink_android.data.repository.ItemRepositoryImpl
+import com.example.campuslink_android.data.repository.NotificationRepositoryImpl
 import com.example.campuslink_android.domain.model.Item
 import com.example.campuslink_android.domain.repository.ItemRepository
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
-    private val itemRepository: ItemRepository
+    private val itemRepository: ItemRepository,
+    private val notificationRepository: NotificationRepositoryImpl
 ) : ViewModel() {
 
+    // ---------------------
+    // 기존 아이템 목록 기능
+    // ---------------------
     private val _items = MutableLiveData<List<Item>>()
     val items: LiveData<List<Item>> get() = _items
 
@@ -35,11 +41,35 @@ class HomeViewModel(
         }
     }
 
+    // ---------------------
+    // ⭐ 알림 개수 기능 추가
+    // ---------------------
+    private val _unread = MutableLiveData<Int>()
+    val unread: LiveData<Int> get() = _unread
+
+    fun loadUnreadCount() {
+        viewModelScope.launch {
+            try {
+                val count = notificationRepository.getUnreadCount()
+                _unread.value = count
+            } catch (e: Exception) {
+                _unread.value = 0
+            }
+        }
+    }
+
     companion object {
         fun create(): HomeViewModel {
-            val api = ApiClient.create(ItemApi::class.java)
-            val repo: ItemRepository = ItemRepositoryImpl(api, TokenStore)
-            return HomeViewModel(repo)
+
+            // Item Repository (기존 그대로)
+            val itemApi = ApiClient.create(ItemApi::class.java)
+            val itemRepo: ItemRepository = ItemRepositoryImpl(itemApi, TokenStore)
+
+            // Notification Repository 추가
+            val notiApi = ApiClient.create(NotificationApi::class.java)
+            val notiRepo = NotificationRepositoryImpl(notiApi, TokenStore)
+
+            return HomeViewModel(itemRepo, notiRepo)
         }
     }
 }
