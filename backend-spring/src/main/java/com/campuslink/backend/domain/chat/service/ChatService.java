@@ -10,15 +10,15 @@ import com.campuslink.backend.domain.chat.repository.ChatMessageRepository;
 import com.campuslink.backend.domain.chat.repository.ChatRoomRepository;
 import com.campuslink.backend.domain.user.entity.User;
 import com.campuslink.backend.domain.user.repository.UserRepository;
-import org.springframework.web.multipart.MultipartFile;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.Path;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -30,15 +30,17 @@ public class ChatService {
     private final ChatMessageRepository messages;
     private final UserRepository users;
 
+    // =============================
     // 유저 검증
+    // =============================
     private User getUser(Integer id) {
         return users.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "사용자 없음"));
     }
 
-    // ----------------------------------------------------
-    // 1) 일반 프로필 기반 채팅
-    // ----------------------------------------------------
+    // =============================
+    // 1:1 프로필 채팅 생성
+    // =============================
     public ChatRoomResponse openDirectChat(Integer meId, Integer targetId) {
 
         if (meId.equals(targetId)) {
@@ -50,7 +52,7 @@ public class ChatService {
                 .orElse(null);
 
         if (existing != null) {
-            return new ChatRoomResponse(existing.getId());
+            return convertRoom(existing, meId);
         }
 
         ChatRoom room = ChatRoom.builder()
@@ -61,23 +63,17 @@ public class ChatService {
 
         room = chatRooms.save(room);
 
-        return new ChatRoomResponse(room.getId());
+        return convertRoom(room, meId);
     }
 
-    // ----------------------------------------------------
-    // 2) 물품 기반 채팅
-    // ----------------------------------------------------
-   
-
-    // ----------------------------------------------------
-    // 3) 메시지 조회
-    // ----------------------------------------------------
+    // =============================
+    // 메시지 조회
+    // =============================
     public List<ChatMessageResponse> getMessages(Integer chatId, Integer meId) {
 
         ChatRoom room = chatRooms.findById(chatId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "방 없음"));
 
-        // 참여자 검증
         if (!isParticipant(room, meId))
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "참여자가 아님");
 
@@ -87,17 +83,16 @@ public class ChatService {
                 .toList();
     }
 
-    // 참여자 체크
     private boolean isParticipant(ChatRoom r, Integer meId) {
         return (r.getUser1Id() != null && r.getUser1Id().equals(meId)) ||
-               (r.getUser2Id() != null && r.getUser2Id().equals(meId)) ||
-               (r.getLenderId() != null && r.getLenderId().equals(meId)) ||
-               (r.getRenterId() != null && r.getRenterId().equals(meId));
+                (r.getUser2Id() != null && r.getUser2Id().equals(meId)) ||
+                (r.getLenderId() != null && r.getLenderId().equals(meId)) ||
+                (r.getRenterId() != null && r.getRenterId().equals(meId));
     }
 
-    // ----------------------------------------------------
-    // 4) 메시지 보내기
-    // ----------------------------------------------------
+    // =============================
+    // 메시지 전송
+    // =============================
     public ChatMessageResponse sendMessage(Integer chatId, Integer senderId, ChatMessageRequest req) {
 
         ChatRoom room = chatRooms.findById(chatId)
@@ -121,6 +116,10 @@ public class ChatService {
         messages.save(msg);
         return toMessageResponse(msg);
     }
+
+    // =============================
+    // 이미지 업로드
+    // =============================
     public String uploadImage(MultipartFile file) {
         try {
             String folder = "C:/CampusLink_New/backend-spring/uploads/chat/";
@@ -131,43 +130,72 @@ public class ChatService {
             file.transferTo(savePath.toFile());
 
             return "/uploads/chat/" + fileName;
-        } catch (Exception e) { ,
+        } catch (Exception e) {
             throw new RuntimeException("이미지 업로드 실패: " + e.getMessage());
         }
     }
+
+    // =============================
+    // 내가 참여한 모든 채팅방 가져오기
+    // =============================
     public List<ChatRoomResponse> getMyChatRooms(Integer meId) {
-        List<ChatRoom> rooms = chatRooms.findAll(); // 또는 커스텀 쿼리
+
+        List<ChatRoom> rooms = chatRooms.findAllRoomsByParticipant(meId);
 
         return rooms.stream()
-                .filter(r ->
-                        (r.getUser1Id() != null && r.getUser1Id().equals(meId)) ||
-                        (r.getUser2Id() != null && r.getUser2Id().equals(meId)) ||
-                        (r.getLenderId() != null && r.getLenderId().equals(meId)) ||
-                        (r.getRenterId() != null && r.getRenterId().equals(meId))
-                )
-                .map(room -> new ChatRoomResponse(room.getId()))
+                .map(room -> convertRoom(room, meId))
                 .toList();
     }
+
+    // =============================
+    // ChatRoom → ChatRoomResponse 변환
+    // =============================
+    private ChatRoomResponse convertRoom(ChatRoom room, Integer meId) {
+
+        ChatRoomResponse dto = new ChatRoomResponse(room.getId());
+
+        dto.setOtherUserName(getOtherUserName(room, meId));
+        dto.setLastMessage(getLastMessage(room.getId()));
+
+        return dto;
+    }
+
+    // 상대방 이름 찾기
     private String getOtherUserName(ChatRoom room, Integer meId) {
-        Integer otherId = room.getUser1Id().equals(meId)
-                ? room.getUser2Id()
-                : room.getUser1Id();
+        Integer otherId = null;
+
+        // 1:1 채팅
+        if (room.getUser1Id() != null && room.getUser2Id() != null) {
+            otherId = room.getUser1Id().equals(meId) ? room.getUser2Id() : room.getUser1Id();
+        }
+
+        // 물품 기반 채팅
+        if (otherId == null) {
+            if (room.getLenderId() != null && room.getLenderId().equals(meId))
+                otherId = room.getRenterId();
+            else
+                otherId = room.getLenderId();
+        }
+
+        if (otherId == null) return null;
 
         return users.findById(otherId)
                 .map(User::getName)
                 .orElse(null);
     }
+
+    // 마지막 메시지 가져오기
     private String getLastMessage(Integer chatId) {
         ChatMessage last = messages.findTop1ByChatIdOrderBySentAtDesc(chatId);
         if (last == null) return null;
 
         if (last.getMessageType() == MessageType.IMAGE) return "[사진]";
-
         return last.getContent();
     }
-    // ----------------------------------------------------
-    // 5) DTO 변환
-    // ----------------------------------------------------
+
+    // =============================
+    // DTO 변환
+    // =============================
     private ChatMessageResponse toMessageResponse(ChatMessage m) {
         return ChatMessageResponse.builder()
                 .messageId(m.getId())
