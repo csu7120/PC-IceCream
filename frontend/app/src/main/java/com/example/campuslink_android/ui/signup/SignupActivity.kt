@@ -54,12 +54,12 @@ class SignupActivity : AppCompatActivity() {
     }
 
     private fun initViews() {
-        spinnerCampus = findViewById(R.id.spinnerCampus)
-        etEmail = findViewById(R.id.etEmail)
-        etPassword = findViewById(R.id.etPassword)
-        etPasswordConfirm = findViewById(R.id.etPasswordConfirm)
-        etName = findViewById(R.id.etName)
-        etPhone = findViewById(R.id.etPhone)
+        spinnerCampus = findViewById(R.id.editSchool)
+        etEmail = findViewById(R.id.editEmail)
+        etPassword = findViewById(R.id.editPassword)
+        etPasswordConfirm = findViewById(R.id.editPasswordCheck)
+        etName = findViewById(R.id.editName)
+        etPhone = findViewById(R.id.editPhone)
         checkPrivacy = findViewById(R.id.checkPrivacy)
         btnShowPrivacy = findViewById(R.id.btnShowPrivacy)
         btnCheckEmail = findViewById(R.id.btnCheckEmail)

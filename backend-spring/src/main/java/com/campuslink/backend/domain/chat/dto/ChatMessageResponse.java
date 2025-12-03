@@ -22,7 +22,7 @@ public class ChatMessageResponse {
 
     // IMAGE 메시지
     private String imageUrl;
-
+    private String lastMessageTime;
     // LOCATION 메시지
     private Double latitude;
     private Double longitude;

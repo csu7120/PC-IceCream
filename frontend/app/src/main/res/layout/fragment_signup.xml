@@ -1,146 +1,160 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="20dp">
+    android:background="#FFFFFF">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:padding="24dp"
+        app:layout_constraintTop_toTopOf="parent">
 
         <!-- 학교 선택 -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="학교 선택"
-            android:textSize="14sp"
-            android:paddingTop="8dp"/>
-
         <Spinner
-            android:id="@+id/spinnerCampus"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:background="@android:drawable/edit_text" />
+            android:id="@+id/editSchool"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:background="@drawable/input_line"
+            android:padding="12dp"
+            android:spinnerMode="dropdown"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <!-- 이메일 -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="이메일"
-            android:textSize="14sp"
-            android:paddingTop="12dp"/>
+        <EditText
+            android:id="@+id/editEmail"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:hint="이메일"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/input_line"
+            android:fontFamily="@font/inter"
+            android:textColor="#2D2D2D"
+            android:textColorHint="#9E9E9E"
+            app:layout_constraintTop_toBottomOf="@id/editSchool"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btnCheckEmail" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <EditText
-                android:id="@+id/etEmail"
-                android:layout_width="0dp"
-                android:layout_height="45dp"
-                android:layout_weight="1"
-                android:hint="이메일 입력"
-                android:inputType="textEmailAddress" />
-
-            <Button
-                android:id="@+id/btnCheckEmail"
-                android:layout_width="100dp"
-                android:layout_height="45dp"
-                android:text="중복확인"
-                android:layout_marginStart="8dp"/>
-        </LinearLayout>
+        <!-- 이메일 중복확인 버튼 -->
+        <Button
+            android:id="@+id/btnCheckEmail"
+            android:layout_width="80dp"
+            android:layout_height="52dp"
+            android:text="확인"
+            android:background="@drawable/btn_outline_blue"
+            android:textColor="#2196F3"
+            android:textAllCaps="false"
+            android:fontFamily="@font/inter"
+            android:layout_marginStart="8dp"
+            app:layout_constraintTop_toTopOf="@id/editEmail"
+            app:layout_constraintBottom_toBottomOf="@id/editEmail"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <!-- 비밀번호 -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="비밀번호"
-            android:paddingTop="12dp"
-            android:textSize="14sp"/>
-
         <EditText
-            android:id="@+id/etPassword"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
+            android:id="@+id/editPassword"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
             android:hint="비밀번호"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:background="@drawable/input_line"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/inter"
+            android:textColor="#2D2D2D"
+            android:textColorHint="#9E9E9E"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/editEmail" />
 
         <!-- 비밀번호 확인 -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="비밀번호 확인"
-            android:textSize="14sp"
-            android:paddingTop="12dp"/>
-
         <EditText
-            android:id="@+id/etPasswordConfirm"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
+            android:id="@+id/editPasswordCheck"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
             android:hint="비밀번호 확인"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:background="@drawable/input_line"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/inter"
+            android:textColor="#2D2D2D"
+            android:textColorHint="#9E9E9E"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/editPassword" />
 
         <!-- 이름 -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="이름"
-            android:paddingTop="12dp"
-            android:textSize="14sp"/>
-
         <EditText
-            android:id="@+id/etName"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:hint="이름"/>
+            android:id="@+id/editName"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:hint="이름"
+            android:background="@drawable/input_line"
+            android:fontFamily="@font/inter"
+            android:layout_marginTop="16dp"
+            android:textColor="#2D2D2D"
+            android:textColorHint="#9E9E9E"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/editPasswordCheck" />
 
         <!-- 전화번호 -->
-        <TextView
+        <EditText
+            android:id="@+id/editPhone"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:hint="전화번호"
+            android:background="@drawable/input_line"
+            android:fontFamily="@font/inter"
+            android:textColor="#2D2D2D"
+            android:textColorHint="#9E9E9E"
+            android:layout_marginTop="16dp"
+            android:inputType="phone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/editName" />
+
+        <!-- 개인정보 동의 체크 -->
+        <CheckBox
+            android:id="@+id/checkPrivacy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="전화번호"
-            android:paddingTop="12dp"
-            android:textSize="14sp"/>
+            android:text="개인정보 동의"
+            android:fontFamily="@font/inter"
+            android:textColor="#2D2D2D"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@id/editPhone"
+            app:layout_constraintStart_toStartOf="parent" />
 
-        <EditText
-            android:id="@+id/etPhone"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:hint="010-0000-0000"
-            android:inputType="phone"/>
-
-        <!-- 개인정보 동의 -->
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="16dp">
-
-            <CheckBox
-                android:id="@+id/checkPrivacy"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="개인정보 처리방침 동의"
-                android:enabled="false"/>
-
-            <Button
-                android:id="@+id/btnShowPrivacy"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:text="보기"/>
-        </LinearLayout>
+        <!-- 개인정보 보기 버튼 -->
+        <Button
+            android:id="@+id/btnShowPrivacy"
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:text="보기"
+            android:background="@drawable/btn_outline_blue"
+            android:textAllCaps="false"
+            android:textColor="#2196F3"
+            android:layout_marginTop="12dp"
+            app:layout_constraintTop_toBottomOf="@id/editPhone"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <!-- 회원가입 버튼 -->
         <Button
             android:id="@+id/btnSignup"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
             android:text="회원가입"
-            android:layout_marginTop="20dp"/>
+            android:textAllCaps="true"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/btn_blue_round"
+            android:fontFamily="@font/inter"
+            android:layout_marginTop="24dp"
+            app:layout_constraintTop_toBottomOf="@id/checkPrivacy"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
-    </LinearLayout>
-
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

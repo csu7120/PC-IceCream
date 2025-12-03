@@ -157,6 +157,7 @@ public class ChatService {
 
         dto.setOtherUserName(getOtherUserName(room, meId));
         dto.setLastMessage(getLastMessage(room.getId()));
+        dto.setLastMessageTime(getLastMessageTime(room.getId()));
 
         return dto;
     }
@@ -193,7 +194,10 @@ public class ChatService {
         if (last.getMessageType() == MessageType.IMAGE) return "[사진]";
         return last.getContent();
     }
-
+    private LocalDateTime getLastMessageTime(Integer chatId) {
+        ChatMessage last = messages.findTop1ByChatIdOrderBySentAtDesc(chatId);
+        return last != null ? last.getSentAt() : null;
+    }
     // =============================
     // DTO 변환
     // =============================

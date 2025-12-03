@@ -1,5 +1,7 @@
 package com.campuslink.backend.domain.chat.dto;
 
+import java.time.LocalDateTime;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,7 +18,7 @@ public class ChatRoomResponse {
     private Integer chatId;
     private String otherUserName;   // 상대 이름
     private String lastMessage;  
-    
+    private LocalDateTime lastMessageTime;
     public ChatRoomResponse(Integer chatId) {
         this.chatId = chatId;
     }// 마지막 메시지

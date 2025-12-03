@@ -7,4 +7,21 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="primaryBlue">#0A4DAA</color>
+
+    <!-- 보낸 메시지 색상 -->
+    <color name="primaryBlueDark">#083F8A</color>
+
+    <!-- 받은 말풍선 배경 -->
+    <color name="lightGray">#F2F3F5</color>
+
+    <!-- 텍스트 색상 -->
+    <color name="darkText">#222222</color>
+
+    <!-- 위치 아이콘 빨간색 -->
+    <color name="red">#FF3B30</color>
+
+    <!-- 흰색 -->
+
+
 </resources>

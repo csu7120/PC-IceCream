@@ -1,47 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:padding="8dp"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#FFFFFF">
+
+    <!-- 상단 파란색 Chat Bar -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@color/primaryBlue"
+        android:padding="12dp">
+
+        <ImageView
+            android:id="@+id/btnBack"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_arrow_right"
+            android:tint="@color/white"
+            android:layout_alignParentStart="true"/>
+
+        <TextView
+            android:id="@+id/tvChatTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="12dp"
+            android:layout_toEndOf="@+id/btnBack"
+            android:text="채팅방"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
 
     <!-- 메시지 목록 -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvMessages"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:padding="8dp"
+        android:clipToPadding="false" />
 
-    <!-- 메시지 입력 + 전송 -->
+    <!-- 메시지 입력 영역 -->
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="60dp"
+        android:padding="8dp"
+        android:background="#F5F5F5"
+        android:gravity="center_vertical">
 
+        <!-- 입력창 -->
         <EditText
             android:id="@+id/etMessage"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:hint="메시지 입력" />
-        <Button
+            android:background="@drawable/bg_message_input"
+            android:paddingHorizontal="16dp"
+            android:textColor="#222222"
+            android:hint="메시지를 입력하세요..."
+            android:maxLines="3" />
+
+        <!-- 이미지 버튼 -->
+        <ImageButton
             android:id="@+id/btnImage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="📷"
-            />
-        <Button
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_menu_report"
+            android:tint="@color/primaryBlue"
+            android:layout_marginStart="6dp"/>
+
+        <!-- 전송 버튼 -->
+        <ImageButton
             android:id="@+id/btnSend"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="전송" />
-        <Button
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_add"
+            android:tint="@color/primaryBlue"
+            android:layout_marginStart="6dp"/>
+
+        <!-- 위치 버튼 -->
+        <ImageButton
             android:id="@+id/btnLocation"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:text="📍"
-            android:clickable="true"
-            android:focusable="true"/>
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_add"
+            android:tint="@color/red"
+            android:layout_marginStart="6dp" />
+
     </LinearLayout>
 
 </LinearLayout>

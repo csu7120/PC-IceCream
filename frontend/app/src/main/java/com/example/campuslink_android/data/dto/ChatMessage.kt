@@ -6,5 +6,7 @@ data class ChatMessage(
     val senderId: Int,
     val content: String?,
     val messageType: String,
-    val sentAt: String
+    val sentAt: String,
+    val senderName: String?,
+    val profileUrl: String?
 )

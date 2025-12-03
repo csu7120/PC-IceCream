@@ -18,7 +18,7 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
-
+import android.widget.ImageButton
 class ChatRoomFragment : Fragment(R.layout.fragment_chat_room) {
 
     private val vm: ChatViewModel by viewModels { ChatViewModelFactory() }
@@ -42,9 +42,9 @@ class ChatRoomFragment : Fragment(R.layout.fragment_chat_room) {
 
         val rv = view.findViewById<RecyclerView>(R.id.rvMessages)
         val et = view.findViewById<EditText>(R.id.etMessage)
-        val btnSend = view.findViewById<Button>(R.id.btnSend)
-        val btnImage = view.findViewById<Button>(R.id.btnImage)
-        val btnLocation = view.findViewById<Button>(R.id.btnLocation)
+        val btnSend = view.findViewById<ImageButton>(R.id.btnSend)
+        val btnImage = view.findViewById<ImageButton>(R.id.btnImage)
+        val btnLocation = view.findViewById<ImageButton>(R.id.btnLocation)
 
         rv.layoutManager = LinearLayoutManager(requireContext())
         adapter = ChatMessageAdapter()
