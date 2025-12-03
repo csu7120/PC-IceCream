@@ -26,4 +26,18 @@ class UserRepositoryImpl(
 
         return dto.toDomain()
     }
+
+    // 🔹 회원 탈퇴 기능 추가
+    override suspend fun deleteUser(): String {
+        val email = tokenStore.getEmail()
+            ?: throw IllegalStateException("로그인된 사용자 이메일이 없습니다.")
+
+        val response = userApi.deleteUser(email)
+
+        if (!response.success) {
+            throw IllegalStateException(response.message ?: "회원 탈퇴 실패")
+        }
+
+        return response.data ?: "회원 탈퇴 완료"
+    }
 }

@@ -1,5 +1,6 @@
 package com.example.campuslink_android.data.repository
 
+import android.util.Log
 import com.example.campuslink_android.data.mapper.toDomain
 import com.example.campuslink_android.core.network.TokenStore
 import com.example.campuslink_android.data.dao.ItemApi
@@ -85,6 +86,7 @@ class ItemRepositoryImpl(
             userId = userIdRb,
             images = imageParts
         )
+        Log.d("RegisterItem", "서버 응답 = $response")
 
         if (!response.success) {
             throw IllegalStateException(response.message ?: "물품 등록 실패")

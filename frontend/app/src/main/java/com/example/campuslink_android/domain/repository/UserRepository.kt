@@ -4,4 +4,5 @@ import com.example.campuslink_android.domain.model.User
 
 interface UserRepository {
     suspend fun getMyInfo(): User
+    suspend fun deleteUser(): String
 }

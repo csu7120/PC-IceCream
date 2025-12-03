@@ -75,7 +75,7 @@
     <!-- 설정 -->
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.example.campuslink_android.ui.profile.SettingsFragment"
+        android:name="com.example.campuslink_android.ui.Setting.SettingsFragment"
         android:label="설정" />
     <fragment
         android:id="@+id/pickupListFragment"

@@ -1,5 +1,6 @@
 package com.campuslink.backend.domain.item.controller;
 
+import com.campuslink.backend.domain.item.dto.ItemResponse;
 import com.campuslink.backend.common.response.ApiResponse;
 import com.campuslink.backend.domain.item.dto.ItemListResponse;
 import com.campuslink.backend.domain.item.entity.Item;
@@ -27,7 +28,7 @@ public class ItemController {
 
     // ✅ 물품 등록 (이미지 포함)
     @PostMapping(consumes = "multipart/form-data")
-    public ApiResponse<Item> registerItem(
+    public ApiResponse<ItemResponse> registerItem(   // ← 여기만 수정됨
             @RequestParam("title") String title,
             @RequestParam(value = "description", required = false) String description,
             @RequestParam("price") Double price,
@@ -48,7 +49,9 @@ public class ItemController {
                     .build();
 
             Item saved = itemService.registerItem(item, files);
-            return ApiResponse.ok(saved);
+
+            // 반환 DTO 고정
+            return ApiResponse.ok(ItemResponse.from(saved));
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -111,9 +114,7 @@ public class ItemController {
         return ApiResponse.ok(result);
     }
 
-    // ⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐
-    // ⭐      추가된 "아이템 상세 조회 API" (핵심)
-    // ⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐
+    // ⭐ 아이템 상세 조회 API
     @GetMapping("/{itemId}")
     public ApiResponse<ItemListResponse> getItemDetail(
             @PathVariable Integer itemId
