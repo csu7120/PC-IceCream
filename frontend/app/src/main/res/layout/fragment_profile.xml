@@ -177,13 +177,13 @@
                         android:id="@+id/btnBorrowed"
                         style="@style/ProfileMenuButtonStyle"
                         android:drawableStart="@drawable/ic_menu_borrowed"
-                        android:text="내가 올린 물품 보기" />
+                        android:text="내가 빌린 목록" />
 
                     <Button
                         android:id="@+id/btnMyItems"
                         style="@style/ProfileMenuButtonStyle"
                         android:drawableStart="@drawable/ic_menu_my_items"
-                        android:text="내가 빌린 목록" />
+                        android:text="내가 올린 목록" />
 
                     <Button
                         android:id="@+id/btnRentalRequests"

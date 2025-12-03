@@ -122,4 +122,13 @@ public class ItemService {
         // 5) DB 삭제(cascade로 item_images 삭제됨)
         itemRepository.delete(item);
     }
+
+    // ----------------------------------------------------
+    // ⭐⭐⭐⭐⭐ 추가된 "아이템 상세 조회" 서비스 메서드 ⭐⭐⭐⭐⭐
+    // ----------------------------------------------------
+    public ItemListResponse getItemDetail(Integer itemId) {
+        Item item = itemRepository.findById(itemId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 아이템입니다."));
+        return ItemListResponse.from(item);
+    }
 }

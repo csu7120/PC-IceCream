@@ -40,12 +40,14 @@ class RentalRequestListFragment : Fragment() {
             layoutManager = LinearLayoutManager(requireContext())
         }
 
-        adapter = RentalRequestAdapter { rentalId ->
-            Log.e("DEBUG", "Accept clicked rentalId=$rentalId")
-            lifecycleScope.launch {
+        adapter = RentalRequestAdapter(
+            onAcceptClick = { rentalId ->
                 viewModel.acceptRental(rentalId)
-            }
-        }
+            },
+            showAcceptButton = true
+        )
+
+
 
         recyclerView.adapter = adapter
 

@@ -59,7 +59,7 @@ public class ItemController {
         }
     }
 
-    // ✅ 내가 올린 물품 조회 API 추가
+    // ✅ 내가 올린 물품 조회
     @GetMapping("/me")
     public ApiResponse<Page<ItemListResponse>> getMyItems(
             @RequestParam("userId") Integer userId,
@@ -108,6 +108,17 @@ public class ItemController {
         Page<ItemListResponse> result =
                 itemService.searchItemDtos(keyword, category, minPrice, maxPrice, pageable);
 
+        return ApiResponse.ok(result);
+    }
+
+    // ⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐
+    // ⭐      추가된 "아이템 상세 조회 API" (핵심)
+    // ⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐
+    @GetMapping("/{itemId}")
+    public ApiResponse<ItemListResponse> getItemDetail(
+            @PathVariable Integer itemId
+    ) {
+        ItemListResponse result = itemService.getItemDetail(itemId);
         return ApiResponse.ok(result);
     }
 }

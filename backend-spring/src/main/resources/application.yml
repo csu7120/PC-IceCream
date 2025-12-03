@@ -20,7 +20,7 @@ spring:
       max-request-size: 20MB       # ⬅ 요청 전체 크기 (파일 여러 개 포함)
 
 file:
-  upload-dir: uploads              # ⬅ 실제 이미지 저장 경로 (backend-spring/uploads 폴더 만들어야 함)
+  upload-dir: "C:/uploads"            # ⬅ 실제 이미지 저장 경로 (backend-spring/uploads 폴더 만들어야 함)
 
 logging:
   level:

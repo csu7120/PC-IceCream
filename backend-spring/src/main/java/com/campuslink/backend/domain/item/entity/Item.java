@@ -14,6 +14,7 @@ import java.util.List;
 @Table(name = "items")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Item {
+	
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,4 +48,5 @@ public class Item {
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("item")
     private List<ItemImage> images;
+    
 }

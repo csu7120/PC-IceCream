@@ -4,6 +4,7 @@ import com.example.campuslink_android.data.mapper.toDomain
 import com.example.campuslink_android.core.network.TokenStore
 import com.example.campuslink_android.data.dao.ItemApi
 import com.example.campuslink_android.data.dto.ItemListResponseDto
+import com.example.campuslink_android.data.dto.ItemResponseDto
 import com.example.campuslink_android.domain.model.Item
 import com.example.campuslink_android.domain.repository.ItemRepository
 import okhttp3.MediaType.Companion.toMediaType
@@ -20,7 +21,12 @@ class ItemRepositoryImpl(
     // ⭐ 전체 물품 조회 (홈)
     override suspend fun getItems(): List<Item> {
 
-        val response = itemApi.getItems()
+        val response = itemApi.getItems(
+            page = 0,
+            size = 20,
+            sortBy = "createdAt",
+            direction = "desc"
+        )
 
         if (!response.success) {
             throw IllegalStateException(response.message ?: "물품 목록 조회 실패")
@@ -34,20 +40,15 @@ class ItemRepositoryImpl(
         return content.map { it.toDomain() }
     }
 
-    // ⭐ 내가 올린 물품 조회
+    // ⭐ 내가 올린 물품 목록
     override suspend fun getMyItems(userId: Int): List<Item> {
-
         val response = itemApi.getMyItems(userId)
-
         if (!response.success) {
             throw IllegalStateException(response.message ?: "내 물품 목록 조회 실패")
         }
-
         val listDto: ItemListResponseDto = response.data
             ?: throw IllegalStateException("서버에서 물품 데이터를 받지 못했습니다.")
-
         val content = listDto.content ?: emptyList()
-
         return content.map { it.toDomain() }
     }
 
@@ -91,5 +92,23 @@ class ItemRepositoryImpl(
 
         return response.data?.toDomain()
             ?: throw IllegalStateException("서버에서 등록된 물품 정보를 받지 못했습니다.")
+    }
+
+
+    // ---------------------------------------------------------
+    // ⭐⭐⭐ 추가된 단일 상세 조회 기능 ⭐⭐⭐
+    // ---------------------------------------------------------
+    override suspend fun getItemDetail(itemId: Int): Item {
+
+        val response = itemApi.getItemDetail(itemId)
+
+        if (!response.success) {
+            throw IllegalStateException(response.message ?: "아이템 상세 조회 실패")
+        }
+
+        val dto: ItemResponseDto = response.data
+            ?: throw IllegalStateException("상세 데이터가 없습니다.")
+
+        return dto.toDomain()
     }
 }

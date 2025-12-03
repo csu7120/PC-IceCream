@@ -87,7 +87,7 @@ class ProfileFragment : Fragment() {
 
         // 내가 빌려준 목록 → 별도 Fragment 안 만들고 요청 목록 화면 재사용
         btnLent.setOnClickListener {
-            findNavController().navigate(R.id.rentalRequestListFragment)
+            findNavController().navigate(R.id.lentListFragment)
         }
 
         // 설정

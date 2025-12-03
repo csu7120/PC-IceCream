@@ -19,4 +19,6 @@ interface ItemRepository {
         userId: Int,
         images: List<File>? = null
     ): Item
+
+    suspend fun getItemDetail(itemId: Int): Item
 }
