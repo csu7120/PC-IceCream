@@ -33,7 +33,7 @@ class RentalRepositoryImpl(
     }
 
     /**
-     * ⭐ 내가 빌려준 목록 (대여 요청 들어온 리스트)
+     * ⭐ 내가 빌려준 목록 중 '요청 상태(REQUESTED)'만
      */
     override suspend fun getRequestedRentals(): List<RentalResponseDto> {
         val email = tokenStore.getEmail()
@@ -45,16 +45,33 @@ class RentalRepositoryImpl(
             throw IllegalStateException("요청 목록 불러오기 실패: ${response.code()}")
         }
 
-        // ⭐ REQUESTED만 남김
         return response.body()?.data
             ?.filter { it.status == "REQUESTED" }
             ?: emptyList()
     }
 
+    /**
+     * ⭐ 내가 빌려준 목록 전체 (REQUESTED 제외)
+     * → '내가 빌려준 목록' 화면에서 사용할 데이터
+     */
+    override suspend fun getLentRentals(): List<RentalResponseDto> {
+        val email = tokenStore.getEmail()
+            ?: throw IllegalStateException("로그인이 필요합니다.")
+
+        val response = rentalApi.getMyLendings(email)
+
+        if (!response.isSuccessful) {
+            throw IllegalStateException("내가 빌려준 목록 불러오기 실패: ${response.code()}")
+        }
+
+        return response.body()?.data
+            // 요청 대기건은 '대여 요청 목록'에서만 보이도록 제외
+            ?.filter { it.status != "REQUESTED" }
+            ?: emptyList()
+    }
 
     /**
-     * ⭐ 대여 수락 (중요!)
-     * email은 ViewModel에서 받아서 전달받도록 구조 개선됨
+     * ⭐ 대여 수락
      */
     override suspend fun acceptRental(rentalId: Int) {
         val token = tokenStore.getToken()
@@ -72,8 +89,6 @@ class RentalRepositoryImpl(
             throw IllegalStateException("대여 수락 실패: ${response.code()}")
         }
     }
-
-
 
     /**
      * ⭐ 내가 빌린 목록
@@ -95,6 +110,7 @@ class RentalRepositoryImpl(
             emptyList()
         }
     }
+
     override suspend fun pickupRental(rentalId: Int) {
         val email = tokenStore.getEmail() ?: error("로그인 필요")
         val res = rentalApi.pickupRental(rentalId, email)
@@ -106,7 +122,4 @@ class RentalRepositoryImpl(
         val res = rentalApi.returnRental(rentalId, email)
         if (!res.isSuccessful) throw IllegalStateException("반납 실패")
     }
-
-
 }
-

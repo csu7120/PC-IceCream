@@ -248,20 +248,7 @@ public class RentalService {
     }
 
     private RentalResponse toResponse(Rental r) {
-        return new RentalResponse(
-                r.getRentalId(),
-                r.getItem().getItemId(),
-                r.getLender().getUserId(),
-                r.getRenter().getUserId(),
-                r.getStartAt(),
-                r.getEndAt(),
-                r.getDailyPrice(),
-                r.getDeposit(),
-                r.getStatus(),
-                r.getPickedUpAt(),
-                r.getReturnedAt(),
-                r.getLateFee(),
-                r.getCreatedAt()
-        );
+        return RentalResponse.from(r);
     }
+
 }

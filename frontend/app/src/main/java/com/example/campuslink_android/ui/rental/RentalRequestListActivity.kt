@@ -22,10 +22,13 @@ class RentalRequestListActivity : AppCompatActivity() {
 
     private val tokenStore = TokenStore
 
-    // 🔥 Adapter 정의 (2개의 인자 rentalId + lenderEmail)
-    private val adapter = RentalRequestAdapter { rentalId ->
-        viewModel.acceptRental(rentalId)
-    }
+    private val adapter = RentalRequestAdapter(
+        onAcceptClick = { rentalId ->
+            viewModel.acceptRental(rentalId)
+        }
+        // showAcceptButton 은 기본값 true 그대로 사용
+    )
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

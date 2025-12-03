@@ -32,7 +32,13 @@ class HomeViewModel(
         viewModelScope.launch {
             try {
                 val result = itemRepository.getItems()
-                _items.value = result
+
+                // ⭐ [수정됨] 받아온 리스트를 최신순(ID가 큰 순서)으로 정렬합니다.
+                // 이렇게 하면 새로 등록한 물품이 맨 위로 올라옵니다.
+                // (만약 Item 클래스에 'id' 대신 'itemId'라고 되어 있다면 it.itemId로 수정해주세요!)
+                val sortedList = result.sortedByDescending { it.id }
+
+                _items.value = sortedList
                 _error.value = null
             } catch (e: Exception) {
                 e.printStackTrace()

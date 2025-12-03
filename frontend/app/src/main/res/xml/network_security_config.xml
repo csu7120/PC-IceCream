@@ -1,9 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <network-security-config>
-    <domain-config cleartextTrafficPermitted="true">
-        <!-- 에뮬레이터 → 로컬 PC -->
-        <domain>10.0.2.2</domain>
-        <!-- 실제 기기에서 테스트할 경우 PC IPv4 주소도 추가 -->
-        <domain>192.168.0.10</domain>
-    </domain-config>
+    <base-config cleartextTrafficPermitted="true" />
 </network-security-config>

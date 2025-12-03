@@ -9,5 +9,6 @@ data class ItemDto(
     @SerializedName("ownerId")
     val ownerId: Int,
     val ownerName: String,
-    val status: String?
+    val status: String?,
+    val description: String?
 )

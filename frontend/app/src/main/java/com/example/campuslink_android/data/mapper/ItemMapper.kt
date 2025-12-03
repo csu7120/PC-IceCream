@@ -14,6 +14,7 @@ fun ItemDto.toDomain(): Item =
         ownerId = ownerId,       // ★ 반드시 필요
         ownerName = ownerName,
         thumbnailUrl = thumbnailUrl,
+        description = description,
         status = status
     )
 
@@ -27,5 +28,6 @@ fun ItemResponseDto.toDomain(): Item =
         ownerId = ownerId,             // ← 반드시 추가
         ownerName = ownerName ?: "",                // 서버가 ownerName 안 주는 경우 빈 값 처리
         thumbnailUrl = images?.firstOrNull(),
+        description = description,
         status = null
     )
