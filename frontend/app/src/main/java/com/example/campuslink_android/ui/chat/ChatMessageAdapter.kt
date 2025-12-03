@@ -127,20 +127,21 @@ class ChatMessageAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     // ---------------------------------------------------------
     inner class ImageLeftViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
+        private val imgProfile = itemView.findViewById<ImageView>(R.id.imgProfile)
         private val imgChat = itemView.findViewById<ImageView>(R.id.imgChat)
         private val txtTime = itemView.findViewById<TextView>(R.id.txtTime)
-        private val imgProfile = itemView.findViewById<ImageView>(R.id.imgProfile)
-        private val txtSenderName = itemView.findViewById<TextView>(R.id.tvSenderName)
 
         fun bind(msg: ChatMessage) {
             val url = "http://10.0.2.2:8080" + msg.content
             Glide.with(itemView.context).load(url).into(imgChat)
+
             txtTime.text = formatTime(msg.sentAt)
 
-            txtSenderName.text = msg.senderName ?: "상대방"
+            // 프로필 이미지
             imgProfile.setImageResource(R.drawable.ic_profile_default)
         }
     }
+
 
     // ---------------------------------------------------------
     // IMAGE RIGHT (내 이미지)

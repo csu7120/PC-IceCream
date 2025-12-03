@@ -1,59 +1,84 @@
 package com.example.campuslink_android.core.network
 
+import android.content.Context
+import android.content.SharedPreferences
+import android.util.Log
+
 object TokenStore {
 
-    @Volatile
-    private var token: String? = null
+    private const val PREF_NAME = "auth_pref"
+    private const val KEY_TOKEN = "jwt_token"
+    private const val KEY_EXPIRES = "jwt_expires"
+    private const val KEY_USER_ID = "jwt_userId"
+    private const val KEY_EMAIL = "jwt_email"
 
-    @Volatile
-    private var expiresAtMillis: Long? = null
+    private lateinit var prefs: SharedPreferences
 
-    @Volatile
-    private var userId: Int? = null
+    fun init(context: Context) {
+        prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+    }
 
-    @Volatile
-    private var email: String? = null
-
+    // -----------------------------
+    // 로그인 정보 저장
+    // -----------------------------
     fun saveLoginInfo(token: String, expiresInMinutes: Int, userId: Int) {
-        this.token = token
-        this.expiresAtMillis = System.currentTimeMillis() + expiresInMinutes * 60_000L
-        this.userId = userId
-        android.util.Log.d(
-            "TokenStore",
-            "saveLoginInfo() 저장됨 → token=$token, userId=$userId, expiresAt=$expiresAtMillis"
-        )
+        val expiresAtMillis = System.currentTimeMillis() + expiresInMinutes * 60_000L
+
+        prefs.edit()
+            .putString(KEY_TOKEN, token)
+            .putLong(KEY_EXPIRES, expiresAtMillis)
+            .putInt(KEY_USER_ID, userId)
+            .apply()
+
+        Log.d("TokenStore", "saveLoginInfo() → token=$token, userId=$userId")
     }
 
+    // -----------------------------
+    // 이메일 저장 / 불러오기
+    // -----------------------------
     fun saveEmail(email: String) {
-        this.email = email
+        prefs.edit().putString(KEY_EMAIL, email).apply()
+        Log.d("TokenStore", "saveEmail() → email=$email")
     }
 
-    fun getToken(): String? {
-        android.util.Log.d("TokenStore", "getToken() 호출됨 → token=$token, exp=$expiresAtMillis")
+    fun getEmail(): String? {
+        val email = prefs.getString(KEY_EMAIL, null)
+        Log.d("TokenStore", "getEmail() → $email")
+        return email
+    }
 
-        // 토큰 자체가 없으면 null
+    // -----------------------------
+    // 토큰 가져오기
+    // -----------------------------
+    fun getToken(): String? {
+        val token = prefs.getString(KEY_TOKEN, null)
+        val expires = prefs.getLong(KEY_EXPIRES, -1L)
+
+        Log.d("TokenStore", "getToken() → token=$token, expires=$expires")
+
         if (token.isNullOrBlank()) return null
 
-        // 만료시간이 존재할 때만 체크
-        expiresAtMillis?.let { exp ->
-            if (System.currentTimeMillis() > exp) {
-                android.util.Log.d("TokenStore", "토큰 만료됨 → clear() 호출")
-                clear()
-                return null
-            }
+        if (expires != -1L && System.currentTimeMillis() > expires) {
+            Log.d("TokenStore", "토큰 만료됨 → clear()")
+            clear()
+            return null
         }
 
         return token
     }
 
-    fun getUserId(): Int? = userId
+    // -----------------------------
+    // userId 가져오기
+    // -----------------------------
+    fun getUserId(): Int? {
+        val id = prefs.getInt(KEY_USER_ID, -1)
+        return if (id == -1) null else id
+    }
 
-    fun getEmail(): String? = email
-
+    // -----------------------------
+    // 전체 삭제
+    // -----------------------------
     fun clear() {
-        token = null
-        expiresAtMillis = null
-        userId = null
-        email = null
+        prefs.edit().clear().apply()
     }
 }

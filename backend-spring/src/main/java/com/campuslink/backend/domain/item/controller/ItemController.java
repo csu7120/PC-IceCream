@@ -28,14 +28,17 @@ public class ItemController {
     // ✅ 물품 등록 (이미지 포함)
     @PostMapping(consumes = "multipart/form-data")
     public ApiResponse<Item> registerItem(
-            @RequestParam("title") String title,
-            @RequestParam(value = "description", required = false) String description,
-            @RequestParam("price") Double price,
-            @RequestParam("category") String category,
-            @RequestParam("userId") Integer userId,
+            @RequestPart("title") String title,
+            @RequestPart(value = "description", required = false) String description,
+            @RequestPart("price") String priceStr,
+            @RequestPart("category") String category,
+            @RequestPart("userId") String userIdStr,
             @RequestPart(value = "images", required = false) List<MultipartFile> files
     ) {
         try {
+            Double price = Double.parseDouble(priceStr);
+            Integer userId = Integer.parseInt(userIdStr);
+
             User user = userRepository.findById(userId)
                     .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
 
@@ -50,9 +53,6 @@ public class ItemController {
             Item saved = itemService.registerItem(item, files);
             return ApiResponse.ok(saved);
 
-        } catch (IOException e) {
-            e.printStackTrace();
-            return ApiResponse.fail("파일 업로드 중 오류 발생: " + e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
             return ApiResponse.fail("등록 실패: " + e.getMessage());
